@@ -7,13 +7,32 @@ import React, {
 const AuthContext = createContext()
 const { Provider } = AuthContext
 
+const loggedUserSample = {
+    // role: 'admin',
+    role: 'driver',
+    username: 'alikhan',
+    firstname: 'Alikhan',
+    surname: 'Baidussenov'
+}
+
 const AuthProvider = ({ children }) => {
-    const [username, setUsername] = useState('alikhan')
+    const [user, setUser] = useState(undefined)
+    const [loggedIn, setLoggedIn] = useState(false)
+
+    const loginUser = () => {
+        setUser(loggedUserSample)
+        setLoggedIn(true)
+    }
+    const logoutUser = () => {
+        setUser(undefined)
+        setLoggedIn(false)
+    }
 
     return (
         <Provider
             value={{
-                username, setUsername
+                user, loggedIn, 
+                loginUser, logoutUser
             }
             }>{children}</Provider>
     )
