@@ -1,11 +1,11 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+const { Schema, model } = require('mongoose')
+const { hash, compare } = require('bcrypt')
 require('dotenv').config // for process.env
 
 const { BCRYPT_SALT_ROUNDS } = process.env
 
-const userSchema = new mongoose.Schema({
-    // 
+const userSchema = new Schema({
+    // driver || maintainer || admin
     role: { type: String, required: true },
     email: {
         type: String,
@@ -25,8 +25,8 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         try {
-            const hash = bcrypt.hash(this.password, parseInt(BCRYPT_SALT_ROUNDS))
-            this.password = hash
+            const hashRes = hash(this.password, parseInt(BCRYPT_SALT_ROUNDS))
+            this.password = hashRes
         } catch (err) {
             console.error(`Failed to hash the password of the following user: ${this.email}`)
             return next(err)
@@ -39,7 +39,7 @@ userSchema.pre('save', async function (next) {
 
 userSchema.methods.comparePassword = async function (password) {
     try {
-        const result = await bcrypt.compare(password, this.password)
+        const result = await compare(password, this.password)
         return result
     } catch (err) {
         console.error('An error ocurred during password compare: ', err.message)
@@ -58,9 +58,9 @@ userSchema.statics.isEmailFree = async function (email) {
         if (user) return false
         return true
     } catch (err) {
-        console.error('An error ocurred in isEmailFree()', err.message)
+        console.error('An error ocurred in User.isEmailFree()', err.message)
         return false
     }
 }
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = model('User', userSchema)
