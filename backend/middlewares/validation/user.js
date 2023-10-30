@@ -1,37 +1,47 @@
 const { check } = require('express-validator')
+const { checkRequiredString } = require('.')
 
-const { ROLES } = require('../../utils/constants')
+const { ROLES, ROLENAMES } = require('../../utils/constants')
 
-const checkRequiredString = fieldname => check(fieldname)
-    .exists().withMessage(`The ${fieldname} field is required`)
-    .trim().not().isEmpty().withMessage(`The ${fieldname} field cannot be empty`)
-    .isString().withMessage(`The ${fieldname} field has to be a string`)
-
-exports.validateUserGet = [
+exports.valEmail = [
     check('email').normalizeEmail().isEmail().withMessage('The Email format is wrong')
 ]
 
-exports.validateUserCreation = [
-    checkRequiredString('role').custom(role => {
-        return ROLES.includes(role)
-    }).withMessage('Invalid role'),
-    check('email').exists().withMessage('Email is required')
-        .normalizeEmail().isEmail().withMessage('The Email format is wrong')
-        .isString().withMessage('Email has to be a string'),
+exports.valCreate = [
+    checkRequiredString('role').custom((role, { req }) => {
+        const { license } = req.body
+        if (ROLES.includes(role)) {
+            if (role === ROLENAMES.driver)
+                if (!license)
+                    throw new Error('License is required for a driver role')
+            return true
+        }
+        throw new Error('Invalid role')
+    }),
+
+    checkRequiredString('email')
+        .normalizeEmail().isEmail().withMessage('The email format is wrong'),
+
     checkRequiredString('password').isLength({ min: 8 }).withMessage('Password has to contain 8 characters at least'),
+
     checkRequiredString('confirmPassword')
         .custom(
             (value, { req }) => value == req.body.password
         ).withMessage('The passwords do not match'),
+
     checkRequiredString('name')
         .isLength({ min: 1, max: 20 }).withMessage('Name has to contain 1 to 20 characters'),
+
     checkRequiredString('surname')
         .isLength({ min: 1, max: 20 }).withMessage('Surname has to contain 1 to 20 characters'),
-    checkRequiredString('phone'),
-    check('dob').optional().isDate().withMessage('Date of birth has to be a date')
+
+    check('license').optional()
+        .trim().not().isEmpty().withMessage('The license cannot be empty')
+        .isString().withMessage('The license has to be a string')
 ]
 
-exports.validateUserLogin = [
-    check('email').normalizeEmail().isEmail().withMessage('aWrong credentials'),
-    check('password').trim().not().isEmpty().withMessage('bWrong credentials')
+exports.valLogin = [
+    check('email').normalizeEmail().isEmail().withMessage('Wrong credentials'),
+
+    check('password').trim().not().isEmpty().withMessage('Wrong credentials')
 ]

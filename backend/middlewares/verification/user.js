@@ -8,6 +8,7 @@ const WebToken = require('../../models/webToken')
 const { JWT_TOKEN_SECRET } = process.env
 
 const { resError, getBearerToken } = require('../../utils')
+const { ROLENAMES } = require('../../utils/constants')
 
 exports.isLoggedIn = async (req, res, next) => {
     const jwtToken = getBearerToken(req)
@@ -27,16 +28,30 @@ exports.isLoggedIn = async (req, res, next) => {
             return resError(res, 'User undefined')
 
         req.user = user
+        console.log(`${user.email}'s authentication verified`)
         next()
     } catch (err) {
         return resError(res, 'Authentication error')
     }
 }
 
-exports.isAdmin = async (req, res, next) => {
-    const user = req.user // from this.isLoggedIn()
-    if (!user.role || user.role != 'admin')
-        return resError(res, 'Insufficient authority')
+exports.isAdmin = (req, res, next) =>
+    isRole(req, res, next, ROLENAMES.admin)
 
+exports.isDriver = (req, res, next) =>
+    isRole(req, res, next, ROLENAMES.driver)
+
+exports.isMaintainer = (req, res, next) =>
+    isRole(req, res, next, ROLENAMES.maintainer)
+
+exports.isFueler = (req, res, next) =>
+    isRole(req, res, next, ROLENAMES.fueler)
+
+const isRole = (req, res, next, role) => {
+    const user = req.user // from this.isLoggedIn()
+    if (!user.role || user.role != role)
+        return resError(res, `${role} authority needed`)
+
+    console.log(`${user.email} is verified to be a ${user.role}`)
     next()
 }

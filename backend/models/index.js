@@ -1,0 +1,8 @@
+exports.Vehicle = require('./vehicle')
+exports.User = require('./user')
+exports.Fueling = require('./fueling')
+exports.Task = require('./task')
+exports.Route = require('./route')
+exports.Service = require('./service')
+exports.WebToken = require('./webToken')
+exports.Maintenance = require('./maintenance')

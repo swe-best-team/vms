@@ -1,32 +1,31 @@
 const { Router } = require('express')
 
 const {
-    getAllUsers,
-    getUserByEmail,
-    userCreate,
+    getAll,
+    getByEmail,
+    create,
     userDelete,
-    userLogin,
-    userLogout,
-    userAuthenticate
+    login,
+    logout,
+    authenticate
 } = require('../controllers/user')
-const { checkValidation, validateDeletion } = require('../middlewares/validation')
+const { checkVal, valDelete } = require('../middlewares/validation')
 const {
-    validateUserGet,
-    validateUserCreation,
-    validateUserLogin
+    valEmail,
+    valCreate,
+    valLogin
 } = require('../middlewares/validation/user')
 const { isLoggedIn, isAdmin } = require('../middlewares/verification/user')
 
 const router = Router()
 
-router.get('/get/all', getAllUsers)
-router.get('/get/email', validateUserGet, checkValidation, getUserByEmail)
-router.get('/get', (req, res) => { res.send('Hey it\'s the get route!') })
+router.get('/get/all', getAll)
+router.get('/get/email', valEmail, checkVal, getByEmail)
 
-router.put('/create', validateUserCreation, checkValidation, isLoggedIn, isAdmin, userCreate)
-router.delete('/delete', validateDeletion, checkValidation, isLoggedIn, isAdmin, userDelete)
-router.post('/login', validateUserLogin, checkValidation, userLogin)
-router.post('/logout', isLoggedIn, userLogout)
-router.post('/authenticate', isLoggedIn, userAuthenticate)
+router.put('/create', valCreate, checkVal, isLoggedIn, isAdmin, create)
+router.delete('/delete', valDelete, checkVal, isLoggedIn, isAdmin, userDelete)
+router.post('/login', valLogin, checkVal, login)
+router.post('/logout', isLoggedIn, logout)
+router.post('/authenticate', isLoggedIn, authenticate)
 
 module.exports = router

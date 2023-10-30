@@ -15,8 +15,7 @@ const userSchema = new Schema({
     password: { type: String, required: true },
     name: { type: String, required: true },
     surname: { type: String, required: true },
-    phone: { type: String, required: true },
-    dob: Date, // date of birth
+    license: String, // optional
     updatedAt: { type: Date, default: Date.now() },
     createdAt: { type: Date, default: Date.now() }
 })
@@ -25,7 +24,7 @@ const userSchema = new Schema({
 userSchema.pre('save', async function (next) {
     if (this.isModified('password')) {
         try {
-            const hashRes = hash(this.password, parseInt(BCRYPT_SALT_ROUNDS))
+            const hashRes = await hash(this.password, parseInt(BCRYPT_SALT_ROUNDS))
             this.password = hashRes
         } catch (err) {
             console.error(`Failed to hash the password of the following user: ${this.email}`)
