@@ -13,13 +13,12 @@ exports.create = async (req, res) => {
     const fields = { date, station, volume, cost, proof }
 
     const fueling = await Fueling({
-        ...fields,
         vehicle: vehicleFile._id,
-        fueler: user._id
+        fueler: user._id,
+        ...fields
     })
 
     return fueling.save().then(() => {
-        console.log(fueling)
         console.log(`${user.email} has fueled ${vehicleFile.brand} ${vehicleFile.model}`)
 
         return res.json({

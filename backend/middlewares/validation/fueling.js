@@ -1,12 +1,14 @@
 const { check } = require('express-validator')
-const { Types } = require('mongoose')
 
-const { checkRequiredString, checkRequiredDecimal, checkRequiredDate } = require('.')
+const {
+    checkRequiredString,
+    checkRequiredDecimal,
+    checkRequiredDate,
+    checkRequiredID
+} = require('.')
 
 exports.valCreate = [
-    checkRequiredString('vehicle')
-        .custom(id => Types.ObjectId.isValid(id))
-        .withMessage('The vehicle field must be a valid Mongo Object ID'),
+    checkRequiredID('vehicle'),
 
     checkRequiredDate('date'),
 

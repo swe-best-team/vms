@@ -1,0 +1,5 @@
+exports.user = require('./user')
+exports.vehicle = require('./vehicle')
+exports.fueling = require('./fueling')
+exports.task = require('./task')
+exports.maintenance = require('./maintenance')

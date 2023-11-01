@@ -1,5 +1,27 @@
 const { Schema, SchemaTypes, model } = require('mongoose')
 
+const locSchema = Schema({
+    longitude: {
+        type: Number,
+        required: true
+    },
+    latitude: {
+        type: Number,
+        required: true
+    }
+})
+
+const locationsSchema = Schema({
+    start: {
+        type: locSchema,
+        required: true
+    },
+    end: {
+        type: locSchema,
+        required: true
+    }
+})
+
 const routeSchema = Schema({
     task: {
         type: SchemaTypes.ObjectId,
@@ -9,18 +31,14 @@ const routeSchema = Schema({
     status: {
         type: String,
         enum: ['completed', 'canceled', 'delayed'],
-        required: true
+        default: 'completed'
     },
     active: {
         type: Boolean,
         default: true
     },
-    startPoint: {
-        type: [Number],
-        required: true
-    },
-    endPoint: {
-        type: [Number],
+    locations: {
+        type: locationsSchema,
         required: true
     }
 })

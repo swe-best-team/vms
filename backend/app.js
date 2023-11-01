@@ -1,9 +1,7 @@
 const express = require('express')
 require('./database')
 
-const userRouter = require('./routes/user')
-const vehicleRouter = require('./routes/vehicle')
-const fuelingRouter = require('./routes/fueling')
+const routers = require('./routers')
 
 const app = express()
 const port = 3000
@@ -17,9 +15,11 @@ app.use((req, res, next) => {
 // saves in req.body data of request body*
 app.use(express.json())
 
-app.use('/user', userRouter)
-app.use('/vehicle', vehicleRouter)
-app.use('/fueling', fuelingRouter)
+app.use('/user', routers.user)
+app.use('/vehicle', routers.vehicle)
+app.use('/fueling', routers.fueling)
+app.use('/task', routers.task)
+app.use('/maintenance', routers.maintenance)
 
 app.get('/', (req, res) => {
     res.send('<h1>Welcome to the vms server!</h1>')
