@@ -5,12 +5,12 @@ import { useAuth } from 'context'
 
 const AccountScreen = () => {
     const { user, logoutUser } = useAuth()
-    const { firstname, surname } = user
+    const { name, surname } = user
 
     return (
         <View>
             <Text>This is AccountScreen</Text>
-            <Text>Hello, {firstname} {surname}</Text>
+            <Text>Hello, {name} {surname}</Text>
             <Button
                 title='Log out'
                 onPress={logoutUser}
