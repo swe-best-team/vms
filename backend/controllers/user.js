@@ -104,12 +104,12 @@ exports.authenticate = async (req, res) => {
     })
 }
 
-exports.userDelete = async (req, res) => {
-    const { _id } = req.body
+exports.remove = async (req, res) => {
+    const { id } = req.body
 
-    return User.findByIdAndDelete(_id).then(doc => {
+    return User.findByIdAndDelete(id).then(doc => {
         const { email } = doc
-        console.error(`User ${email} is deleted from the DB`)
+        console.error(`User ${email} is removed from the DB`)
 
         return res.json({ success: true })
     }).catch(() => resError(res, 'Failed to delete the user'))

@@ -4,12 +4,12 @@ const {
     getAll,
     getByEmail,
     create,
-    userDelete,
+    remove,
     login,
     logout,
     authenticate
 } = require('../controllers/user')
-const { checkVal, valDelete } = require('../middlewares/validation')
+const { checkVal, checkRemove } = require('../middlewares/validation')
 const {
     valEmail,
     valCreate,
@@ -23,7 +23,7 @@ router.get('/get/all', getAll)
 router.get('/get/email', valEmail, checkVal, getByEmail)
 
 router.put('/create', valCreate, checkVal, isLoggedIn, isAdmin, create)
-router.delete('/delete', valDelete, checkVal, isLoggedIn, isAdmin, userDelete)
+router.delete('/remove', checkRemove, isLoggedIn, isAdmin, remove)
 router.post('/login', valLogin, checkVal, login)
 router.post('/logout', isLoggedIn, logout)
 router.post('/authenticate', isLoggedIn, authenticate)
