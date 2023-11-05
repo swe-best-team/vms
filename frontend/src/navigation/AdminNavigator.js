@@ -1,8 +1,7 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HelloScreen from 'screens/admin/HelloScreen'
+import AdminScreen from 'screens/admin'
 
 const Tab = createBottomTabNavigator()
 const { Screen, Navigator } = Tab
@@ -10,11 +9,12 @@ const { Screen, Navigator } = Tab
 const AdminNavigator = () => {
     return (
         <Navigator
-            initialRouteName='HelloScreen'
+            initialRouteName='AdminScreen'
         >
             <Screen
-                name='HelloScreen'
-                component={HelloScreen}
+                name='AdminScreen'
+                component={AdminScreen}
+                options={{ title: 'Admin' }}
             />
         </Navigator>
     )

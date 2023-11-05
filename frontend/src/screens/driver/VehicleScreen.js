@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 
-const CarScreen = () => {
+const VehicleScreen = () => {
     return (
         <View>
-            <Text>CarScreen</Text>
+            <Text>VehicleScreen</Text>
         </View>
     )
 }
 
-export default CarScreen
+export default VehicleScreen

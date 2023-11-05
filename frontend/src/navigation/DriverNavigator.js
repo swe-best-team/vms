@@ -2,25 +2,25 @@ import React from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import AccountScreen from 'screens/driver/AccountScreen'
-import CarScreen from 'screens/driver/CarScreen'
+import DriverScreen from 'screens/driver'
+import VehicleScreen from 'screens/driver/VehicleScreen'
 
 const Tab = createBottomTabNavigator()
 const { Screen, Navigator } = Tab
 
 const DriverNavigator = () =>
     <Navigator
-        initialRouteName='AccountScreen'
+        initialRouteName='DriverScreen'
     >
         <Screen
-            name='AccountScreen'
-            component={AccountScreen}
-            options={{ title: 'Account' }}
+            name='DriverScreen'
+            component={DriverScreen}
+            options={{ title: 'Driver' }}
         />
         <Screen
-            name='CarScreen'
-            component={CarScreen}
-            options={{ title: 'Car' }}
+            name='VehicleScreen'
+            component={VehicleScreen}
+            options={{ title: 'Vehicle' }}
         />
     </Navigator>
 

@@ -56,5 +56,5 @@ exports.remove = async (req, res) => {
         console.log(`Successfully removed the vehicle of ${brand} ${model}`)
 
         return res.json({ success: true })
-    }).catch(() => resError(res, `Failed to remove a vehicle`))
+    }).catch(() => resError(res, 'Failed to remove a vehicle'))
 }

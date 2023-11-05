@@ -62,7 +62,6 @@ exports.remove = async (req, res) => {
 }
 
 exports.removeMaintenance = async id => {
-    console.log(id)
     try {
         await Service.deleteMany({ maintenance: id })
         console.log('All the attached services are removed')

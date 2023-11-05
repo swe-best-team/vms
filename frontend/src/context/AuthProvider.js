@@ -1,13 +1,16 @@
 import React, {
     createContext,
     useContext,
-    useState
+    useState,
+    useEffect
 } from 'react'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import {
     login as loginAPI,
+    logout as logoutAPI,
+    authenticate as authenticateAPI,
     getAll
 } from 'api/user'
 
@@ -19,6 +22,22 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(undefined)
     const [webToken, setWebToken] = useState('')
 
+    useEffect(() => {
+        fetch()
+    }, [])
+
+    const fetch = async () => {
+        const jwtToken = await AsyncStorage.getItem('webToken')
+        if (jwtToken) {
+            authenticateAPI(jwtToken).then(async ({ user }) => {
+                console.log('authenticated!')
+                await AsyncStorage.setItem('webToken', jwtToken)
+                setWebToken(jwtToken)
+                setUser(user)
+                setLoggedIn(true)
+            }).catch(err => console.log(err))
+        } else await AsyncStorage.removeItem('webToken')
+    }
     const login = (email, password) =>
         loginAPI(email, password)
             .then(async ({ jwtToken, user }) => {
@@ -31,16 +50,21 @@ const AuthProvider = ({ children }) => {
             })
             .catch(err => { console.log(err) })
 
-    const logoutUser = () => {
-        setUser(undefined)
-        setLoggedIn(false)
-    }
+    const logout = () =>
+        logoutAPI(webToken)
+            .then(async () => {
+                console.log('logged out!')
+                await AsyncStorage.removeItem('webToken')
+                setLoggedIn(false)
+                setUser(undefined)
+                setWebToken('')
+            })
 
     return (
         <Provider
             value={{
                 user, loggedIn,
-                login, logoutUser
+                login, logout
             }
             }>{children}</Provider>
     )
