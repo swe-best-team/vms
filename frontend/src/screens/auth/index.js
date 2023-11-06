@@ -5,13 +5,18 @@ import { useAuth } from 'context'
 import {
     StyleSheet
 } from 'react-native'
-import { Text, TextInput, Button } from 'react-native-paper'
+import {
+    Text,
+    TextInput,
+    Button,
+    RadioButton
+} from 'react-native-paper'
 import Screen from 'components/Screen'
 
-const LoginScreen = () => {
+const AuthScreen = () => {
     const { login } = useAuth()
 
-    const [email, setEmail] = useState('driver@email.com')
+    const [email, setEmail] = useState('admin@email.com')
     const [password, setPassword] = useState('alihan123')
 
     const btnDisabled = !(email && password)
@@ -29,7 +34,6 @@ const LoginScreen = () => {
                 onChangeText={text => setEmail(text.toLowerCase())}
                 mode='outlined'
                 style={styles.input}
-                autoCapitalize='none'
             />
             <TextInput
                 label='Password'
@@ -65,4 +69,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LoginScreen
+export default AuthScreen

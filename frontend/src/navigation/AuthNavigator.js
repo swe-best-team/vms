@@ -2,18 +2,18 @@ import React from 'react'
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from 'screens/auth'
+import AuthScreen from 'screens/auth'
 
 const Stack = createNativeStackNavigator()
 const { Screen, Navigator } = Stack
 
 const AuthNavigator = () =>
     <Navigator
-        initialRouteName='LoginScreen'
+        initialRouteName='AuthScreen'
     >
         <Screen
-            name='LoginScreen'
-            component={LoginScreen}
+            name='AuthScreen'
+            component={AuthScreen}
             options={{ title: 'Authorization' }}
         />
     </Navigator>

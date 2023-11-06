@@ -3,8 +3,6 @@ import api from 'api'
 
 export const login = async (email, password) =>
     await new Promise(async (resolve, reject) => {
-        console.log('logging in...')
-
         const response = await api.post('user/login', { email, password })
         const { success, message, ...data } = response.data
 
@@ -14,8 +12,6 @@ export const login = async (email, password) =>
 
 export const authenticate = async (jwtToken) =>
     await new Promise(async (resolve, reject) => {
-        console.log('authenticating...')
-
         const response = await api.post('user/authenticate', {}, {
             headers: { Authorization: `Bearer ${jwtToken}` }
         })
@@ -27,8 +23,6 @@ export const authenticate = async (jwtToken) =>
 
 export const create = async (jwtToken, user) =>
     await new Promise(async (resolve, reject) => {
-        console.log('creating a new user...')
-
         const response = await api.put('user/create', { ...user }, {
             headers: { Authorization: `Bearer ${jwtToken}` }
         })
@@ -40,8 +34,6 @@ export const create = async (jwtToken, user) =>
 
 export const logout = async (jwtToken) =>
     await new Promise(async (resolve, reject) => {
-        console.log('logging out...')
-
         const response = await api.post('user/logout', {}, {
             headers: { Authorization: `Bearer ${jwtToken}` }
         })
@@ -51,7 +43,7 @@ export const logout = async (jwtToken) =>
         else reject(message)
     })
 
-export const getAll = async jwtToken =>
+export const getAll = async () =>
     await new Promise(async (resolve, reject) => {
         console.log('getting all users...')
 
@@ -70,6 +62,7 @@ export const remove = async (jwtToken, _id) =>
             headers: { Authorization: `Bearer ${jwtToken}` },
         })
         const { success, message } = response.data
+
         if (success) resolve()
         else reject(message)
     })

@@ -30,7 +30,7 @@ exports.checkRequiredArray = fieldname => this.checkRequired(fieldname)
     .withMessage(`The ${fieldname} field has to be a non-empty array`)
 
 exports.checkRequiredID = fieldname => this.checkRequiredString(fieldname)
-    .custom(id => console.log('hey') || Types.ObjectId.isValid(id))
+    .custom(id => Types.ObjectId.isValid(id))
     .withMessage(`The ${fieldname} field must be a valid Mongo Object ID`)
 
 exports.checkRequiredString = fieldname => this.checkRequired(fieldname)

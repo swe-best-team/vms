@@ -39,13 +39,18 @@ exports.create = async (req, res) => {
     const { email } = req.body
     const emailFree = await User.isEmailFree(email)
     if (!emailFree)
-        return resError(res, 'Email is already taken')
+        return resError(res, 'The email is already taken')
 
     const { role, name, surname, password, ...rest } = req.body
     let fields = { role, email, name, surname, password }
 
-    if (role == ROLENAMES.driver && rest.license)
-        fields.license = rest.license
+    if (role == ROLENAMES.driver && rest.license) {
+        const license = rest.license
+        const licensedUser = await User.findOne({ license })
+
+        if (licensedUser) return resError(res, 'The license is already taken')
+        fields.license = license
+    }
 
     const user = await User(fields)
     return user.save().then(() => {

@@ -1,13 +1,16 @@
 import React from 'react'
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import AdminScreen from 'screens/admin'
+import AdminProvider from 'context/AdminProvider'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const Tab = createBottomTabNavigator()
+import AdminScreen from 'screens/admin'
+import CreateUserScreen from 'screens/admin/CreateUserScreen'
+
+const Tab = createNativeStackNavigator()
 const { Screen, Navigator } = Tab
 
-const AdminNavigator = () => {
-    return (
+const AdminNavigator = () =>
+    <AdminProvider>
         <Navigator
             initialRouteName='AdminScreen'
         >
@@ -16,8 +19,12 @@ const AdminNavigator = () => {
                 component={AdminScreen}
                 options={{ title: 'Admin' }}
             />
+            <Screen
+                name='CreateUserScreen'
+                component={CreateUserScreen}
+                options={{ title: 'Create a user' }}
+            />
         </Navigator>
-    )
-}
+    </AdminProvider>
 
 export default AdminNavigator

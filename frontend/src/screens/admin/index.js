@@ -3,10 +3,10 @@ import React from 'react'
 import { useAuth } from 'context'
 
 import { StyleSheet } from 'react-native'
-import {Text, Button} from 'react-native-paper'
+import { Text, Button } from 'react-native-paper'
 import Screen from 'components/Screen'
 
-const HelloScreen = () => {
+const AdminScreen = ({ navigation }) => {
     const { user, logout } = useAuth()
     const { name, surname } = user
 
@@ -15,6 +15,11 @@ const HelloScreen = () => {
             <Text
                 variant='titleLarge'
             >Welcome, {name} {surname}!</Text>
+            <Button
+                mode='contained'
+                onPress={() => navigation.navigate('CreateUserScreen')}
+                style={styles.btn}
+            >Add a user</Button>
             <Button
                 mode='contained'
                 onPress={logout}
@@ -30,4 +35,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HelloScreen
+export default AdminScreen
