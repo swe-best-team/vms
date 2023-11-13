@@ -2,7 +2,6 @@ import React from 'react'
 
 import {
     SafeAreaView,
-    StatusBar,
     StyleSheet
 } from 'react-native'
 
@@ -17,8 +16,7 @@ const Screen = ({ children, style, ...props }) =>
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 20,
-        paddingVertical: 20
+        marginHorizontal: 20
     }
 })
 

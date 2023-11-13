@@ -12,13 +12,22 @@ const { JWT_TOKEN_SECRET } = process.env
 exports.getAll = async (req, res) =>
     await User.find()
         .then(users => {
-            const safeUsersInfo = users.map(user => user.getSafeInfo())
+            const safeUserInfos = users.map(user => user.getSafeInfo())
             return res.json({
                 success: true,
-                users: safeUsersInfo
+                users: safeUserInfos
             })
-        })
-        .catch(() => resError(res, 'No users found'))
+        }).catch(() => resError(res, 'No users found'))
+
+exports.getAllDrivers = async (req, res) =>
+    await User.find({ role: ROLENAMES.driver })
+        .then(drivers => {
+            const safeUserInfos = drivers.map(user => user.getSafeInfo())
+            return res.json({
+                success: true,
+                drivers: safeUserInfos
+            })
+        }).catch(() => resError(res, 'No drivers found'))
 
 exports.getByEmail = async (req, res) => {
     const { email } = req.query

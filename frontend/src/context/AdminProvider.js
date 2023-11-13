@@ -5,7 +5,10 @@ import React, {
 } from 'react'
 
 import { useAuth } from 'context/AuthProvider'
-import { create as createAPI } from 'api/user'
+import {
+    create as createAPI,
+    getAllDrivers as getAllDriversAPI
+} from 'api/user'
 
 const AdminContext = createContext()
 const { Provider } = AdminContext
@@ -16,11 +19,15 @@ const AdminProvider = ({ children }) => {
         console.log('creating a new user...')
         return createAPI(webToken, user)
     }
+    const getAllDrivers = async () => {
+        console.log('getting all drivers...')
+        return getAllDriversAPI()
+    }
 
     return (
         <Provider
             value={{
-                createUser
+                createUser, getAllDrivers
             }}
         >{children}</Provider>
     )

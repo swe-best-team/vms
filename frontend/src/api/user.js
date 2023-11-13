@@ -10,10 +10,10 @@ export const login = async (email, password) =>
         else reject(message)
     })
 
-export const authenticate = async (jwtToken) =>
+export const authenticate = async jwt =>
     await new Promise(async (resolve, reject) => {
         const response = await api.post('user/authenticate', {}, {
-            headers: { Authorization: `Bearer ${jwtToken}` }
+            headers: { Authorization: `Bearer ${jwt}` }
         })
         const { success, message, ...data } = response.data
 
@@ -21,10 +21,10 @@ export const authenticate = async (jwtToken) =>
         else reject(message)
     })
 
-export const create = async (jwtToken, user) =>
+export const create = async (jwt, user) =>
     await new Promise(async (resolve, reject) => {
         const response = await api.put('user/create', { ...user }, {
-            headers: { Authorization: `Bearer ${jwtToken}` }
+            headers: { Authorization: `Bearer ${jwt}` }
         })
         const { success, message } = response.data
 
@@ -32,10 +32,10 @@ export const create = async (jwtToken, user) =>
         else reject(message)
     })
 
-export const logout = async (jwtToken) =>
+export const logout = async jwt =>
     await new Promise(async (resolve, reject) => {
         const response = await api.post('user/logout', {}, {
-            headers: { Authorization: `Bearer ${jwtToken}` }
+            headers: { Authorization: `Bearer ${jwt}` }
         })
         const { success, message } = response.data
 
@@ -45,8 +45,6 @@ export const logout = async (jwtToken) =>
 
 export const getAll = async () =>
     await new Promise(async (resolve, reject) => {
-        console.log('getting all users...')
-
         const response = await api.get('user/get/all')
         const { success, users, message } = response.data
 
@@ -54,12 +52,21 @@ export const getAll = async () =>
         else reject(message)
     })
 
-export const remove = async (jwtToken, _id) =>
+export const getAllDrivers = async () =>
+    await new Promise(async (resolve, reject) => {
+        const response = await api.get('user/get/all/drivers')
+        const { success, drivers, message } = response.data
+
+        if (success) resolve(drivers)
+        else reject(message)
+    })
+
+export const remove = async (jwt, _id) =>
     await new Promise(async (resolve, reject) => {
         console.log('removing...')
 
         const response = await api.delete('user/delete', { _id }, {
-            headers: { Authorization: `Bearer ${jwtToken}` },
+            headers: { Authorization: `Bearer ${jwt}` },
         })
         const { success, message } = response.data
 

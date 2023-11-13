@@ -7,7 +7,8 @@ const {
     remove,
     login,
     logout,
-    authenticate
+    authenticate,
+    getAllDrivers
 } = require('../controllers/user')
 const { checkVal, checkRemove } = require('../middlewares/validation')
 const {
@@ -20,6 +21,7 @@ const { isLoggedIn, isAdmin } = require('../middlewares/verification/user')
 const router = Router()
 
 router.get('/get/all', getAll)
+router.get('/get/all/drivers', getAllDrivers)
 router.get('/get/email', valEmail, checkVal, getByEmail)
 
 router.put('/create', valCreate, checkVal, isLoggedIn, isAdmin, create)

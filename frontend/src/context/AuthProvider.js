@@ -17,12 +17,22 @@ const AuthContext = createContext()
 const { Provider } = AuthContext
 
 const AuthProvider = ({ children }) => {
+    const serverConnected = false
+
     const [loggedIn, setLoggedIn] = useState(false)
     const [user, setUser] = useState(undefined)
     const [webToken, setWebToken] = useState('')
 
     useEffect(() => {
-        fetch()
+        if (serverConnected) fetch()
+        else {
+            setUser({
+                name: 'Alikhan',
+                surname: 'Baidussenov',
+                role: 'admin'
+            })
+            setLoggedIn(true)
+        }
     }, [])
 
     const fetch = async () => {
@@ -68,6 +78,7 @@ const AuthProvider = ({ children }) => {
     return (
         <Provider
             value={{
+                serverConnected,
                 user, loggedIn,
                 login, logout, webToken
             }}

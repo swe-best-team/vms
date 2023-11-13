@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-import {
-    ScrollView,
-    StyleSheet,
-} from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 import Screen from 'components/Screen'
-import CustomTextInput from './CustomTextInput'
+import TextInput from 'components/TextInput'
 import RoleView from './RoleView'
 
 import { ROLES } from 'utils/constants'
@@ -16,15 +13,17 @@ import { useAdmin } from 'context/AdminProvider'
 const CreateUserScreen = () => {
     const { createUser } = useAdmin()
 
-    const [role, setRole] = useState(ROLES.driver)
-    const [name, setName] = useState('Alikhan')
-    const [surname, setSurname] = useState('Baidussenov')
-    const [email, setEmail] = useState('aaa@email.com')
-    const [password, setPassword] = useState('alihan123')
-    const [confirmPassword, setConfirmPassword] = useState('alihan123')
-    const [license, setLicense] = useState('AC8493033') // for a driver
+    const [role, setRole] = useState('')
+    const [name, setName] = useState('')
+    const [surname, setSurname] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
+    const [license, setLicense] = useState('') // for a driver. ex: AC8493033
 
-    const btnDisabled = !(email && password)
+    const btnDisabled = !(
+        role && name && surname && email && password && confirmPassword
+        && (license || role != ROLES.driver))
     const licenseVisible = role === ROLES.driver
     const user = { role, name, surname, email, password, confirmPassword, license }
 
@@ -39,42 +38,41 @@ const CreateUserScreen = () => {
                     role={role}
                     setRole={setRole}
                 />
-                <CustomTextInput
+                <TextInput
                     label='Name'
                     state={name}
                     setState={setName}
                 />
-                <CustomTextInput
+                <TextInput
                     label='Surname'
                     state={surname}
                     setState={setSurname}
                 />
                 {licenseVisible && (
-                    <CustomTextInput
+                    <TextInput
                         label="Driver's license"
                         state={license}
                         onChangeText={text => setLicense(text.toLowerCase())}
                     />
                 )}
-                <CustomTextInput
+                <TextInput
                     label='Email'
                     state={email}
                     onChangeText={text => setEmail(text.toLowerCase())}
                 />
-                <CustomTextInput
+                <TextInput
                     label='Password'
                     state={password}
                     onChangeText={text => setPassword(text.toLowerCase())}
                     secureTextEntry
                 />
-                <CustomTextInput
+                <TextInput
                     label='Confirm password'
                     state={confirmPassword}
                     onChangeText={text => setConfirmPassword(text.toLowerCase())}
                     secureTextEntry
                 />
                 <Button
-                    mode='contained'
                     onPress={create}
                     disabled={btnDisabled}
                     style={styles.btn}
@@ -86,7 +84,8 @@ const CreateUserScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginVertical: 20
     },
     btn: {
         marginTop: 20

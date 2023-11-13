@@ -16,12 +16,14 @@ const AdminScreen = ({ navigation }) => {
                 variant='titleLarge'
             >Welcome, {name} {surname}!</Text>
             <Button
-                mode='contained'
                 onPress={() => navigation.navigate('CreateUserScreen')}
                 style={styles.btn}
-            >Add a user</Button>
+            >Create a user</Button>
             <Button
-                mode='contained'
+                onPress={() => navigation.navigate('CreateTaskScreen')}
+                style={styles.btn}
+            >Create a task</Button>
+            <Button
                 onPress={logout}
                 style={styles.btn}
             >Log out</Button>
