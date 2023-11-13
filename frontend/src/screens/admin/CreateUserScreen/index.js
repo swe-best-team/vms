@@ -13,7 +13,7 @@ import { useAlert } from 'context/AlertProvider'
 
 const CreateUserScreen = () => {
     const { createUser } = useAdmin()
-    const { activateLoading, stopLoadingAndshowAlert } = useAlert()
+    const { activateLoading, stopLoadingAndShowAlert } = useAlert()
 
     const [role, setRole] = useState('')
     const [name, setName] = useState('')
@@ -33,10 +33,10 @@ const CreateUserScreen = () => {
         activateLoading()
         createUser(user).then(() => {
             console.log('a user created!')
-            stopLoadingAndshowAlert(true, 'The user is successfully created!')
+            stopLoadingAndShowAlert(true, 'The user is successfully created!')
         }).catch(err => {
             console.error(err)
-            stopLoadingAndshowAlert(false, err)
+            stopLoadingAndShowAlert(false, err)
         })
     }
 

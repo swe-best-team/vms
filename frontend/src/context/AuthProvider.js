@@ -48,19 +48,23 @@ const AuthProvider = ({ children }) => {
             }).catch(err => console.error(err))
         } else await AsyncStorage.removeItem('webToken')
     }
-    const login = (email, password) => {
-        console.log('logging in...')
-        loginAPI(email, password)
-            .then(async ({ jwtToken, user }) => {
-                console.log('logged in!')
+    const login = (email, password) =>
+        new Promise((resolve, reject) => {
+            console.log('logging in...')
+            loginAPI(email, password)
+                .then(async ({ jwtToken, user }) => {
+                    console.log('logged in!')
+                    await AsyncStorage.setItem('webToken', jwtToken)
+                    setWebToken(jwtToken)
+                    setUser(user)
+                    setLoggedIn(true)
+                    resolve()
+                }).catch(err => {
+                    console.error(err)
+                    reject(err)
+                })
+        })
 
-                await AsyncStorage.setItem('webToken', jwtToken)
-                setWebToken(jwtToken)
-                setUser(user)
-                setLoggedIn(true)
-            })
-            .catch(err => { console.error(err) })
-    }
 
     const logout = () => {
         setLoggedIn(false)

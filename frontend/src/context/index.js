@@ -5,11 +5,11 @@ import AlertProvider from './AlertProvider'
 
 const MainProvider = ({ children }) => {
     return (
-        <AuthProvider>
-            <AlertProvider>
+        <AlertProvider>
+            <AuthProvider>
                 {children}
-            </AlertProvider>
-        </AuthProvider>
+            </AuthProvider>
+        </AlertProvider>
     )
 }
 

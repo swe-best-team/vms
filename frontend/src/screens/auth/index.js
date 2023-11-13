@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { useAuth } from 'context'
+import { useAlert } from 'context/AlertProvider'
 
 import {
     StyleSheet
@@ -14,12 +15,20 @@ import Screen from 'components/Screen'
 
 const AuthScreen = () => {
     const { login } = useAuth()
+    const { activateLoading, stopLoading, stopLoadingAndShowAlert } = useAlert()
 
     const [email, setEmail] = useState('admin@email.com')
     const [password, setPassword] = useState('alihan123')
 
     const btnDisabled = !(email && password)
-    const onPress = () => login(email, password)
+    const onPress = () => {
+        activateLoading()
+        login(email, password).then(() => {
+            stopLoading()
+        }).catch(err => {
+            stopLoadingAndShowAlert(false, err)
+        })
+    }
 
     return (
         <Screen style={styles.container}>

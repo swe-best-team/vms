@@ -18,6 +18,7 @@ const { Provider } = AdminContext
 
 const AdminProvider = ({ children }) => {
     const { webToken } = useAuth()
+
     const createUser = async user => {
         console.log('creating a new user...')
         return createUserAPI(webToken, user)

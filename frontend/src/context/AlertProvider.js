@@ -25,7 +25,7 @@ const AlertProvider = ({ children }) => {
         setVisible(false)
         setLoading(true)
     }
-    const stopLoadingAndshowAlert = (status, msg) => {
+    const stopLoadingAndShowAlert = (status, msg) => {
         setLoading(false)
         setSuccess(status)
         setText(msg)
@@ -34,12 +34,16 @@ const AlertProvider = ({ children }) => {
     const hideAlert = () => {
         setVisible(false)
     }
+    const stopLoading = () => {
+        setLoading(false)
+    }
 
     return (
         <Provider
             value={{
                 activateLoading,
-                stopLoadingAndshowAlert
+                stopLoadingAndShowAlert,
+                stopLoading
             }}
         >
             <PaperProvider>

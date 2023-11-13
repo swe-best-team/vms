@@ -15,7 +15,7 @@ import CalendarModal from './CalendarModal'
 
 const CreateTaskScreen = () => {
     const { createTask } = useAdmin()
-    const { activateLoading, stopLoadingAndshowAlert } = useAlert()
+    const { activateLoading, stopLoadingAndShowAlert } = useAlert()
 
     const [executor, setExecutor] = useState(null)
     const [vehicle, setVehicle] = useState(null)
@@ -44,10 +44,10 @@ const CreateTaskScreen = () => {
         }
         createTask(task).then(() => {
             console.log('a task created!')
-            stopLoadingAndshowAlert(true, 'The task is successfully created!')
+            stopLoadingAndShowAlert(true, 'The task is successfully created!')
         }).catch(err => {
             console.error(err)
-            stopLoadingAndshowAlert(false, err)
+            stopLoadingAndShowAlert(false, err)
         })
     }
 
