@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { useAdmin } from 'context/AdminProvider'
+
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import Screen from 'components/Screen'
@@ -11,6 +13,8 @@ import VehicleModal from './VehicleModal'
 import CalendarModal from './CalendarModal'
 
 const CreateTaskScreen = () => {
+    const { createTask } = useAdmin()
+
     const [executor, setExecutor] = useState(null)
     const [vehicle, setVehicle] = useState(null)
     const [deadline, setDeadline] = useState(null)
@@ -21,14 +25,35 @@ const CreateTaskScreen = () => {
     const [vehiclesFound, setVehiclesFound] = useState(false)
     const [visibleMap, setVisibleMap] = useState(null)
     const [calendarVisible, setCalendarVisible] = useState(false)
+    const [createDisabled, setCreateDisabled] = useState(false)
 
     const addRoute = () => {
         setRoutes([...routes, null])
+    }
+    const create = () => {
+        const date = new Date(deadline.timestamp)
+        const task = {
+            executor: executor._id,
+            vehicle: vehicle._id,
+            deadline: date.toISOString(),
+            routes
+        }
+        createTask(task).then(() => {
+            console.log('a task created!')
+        }).catch(err => { console.error(err) })
     }
 
     useEffect(() => {
         setRoutes([])
     }, [vehicle])
+    useEffect(() => {
+        if (routes.length == 0)
+            return setCreateDisabled(true)
+        for (const route of routes)
+            if (route == null)
+                return setCreateDisabled(true)
+        setCreateDisabled(false)
+    }, [routes])
 
     return (
         <Screen style={styles.container}>
@@ -105,7 +130,7 @@ const CreateTaskScreen = () => {
                                 <MapModal
                                     visible={visibleMap == i}
                                     close={selectedRoute => {
-                                        let newRoutes = routes
+                                        let newRoutes = [...routes]
                                         newRoutes[i] = selectedRoute
                                         setRoutes(newRoutes)
                                         setVisibleMap(null)
@@ -132,6 +157,12 @@ const CreateTaskScreen = () => {
                     >Add a route</Button>
                 </>
             }
+            <Button
+                mode='contained'
+                style={styles.btn}
+                onPress={create}
+                disabled={createDisabled}
+            >Create</Button>
         </Screen >
     )
 }

@@ -28,7 +28,7 @@ const CreateUserScreen = () => {
     const user = { role, name, surname, email, password, confirmPassword, license }
 
     const create = () => createUser(user).then(() => {
-        console.log('A user created!')
+        console.log('a user created!')
     }).catch(err => { console.error(err) })
 
     return (
@@ -73,6 +73,7 @@ const CreateUserScreen = () => {
                     secureTextEntry
                 />
                 <Button
+                    mode='contained'
                     onPress={create}
                     disabled={btnDisabled}
                     style={styles.btn}

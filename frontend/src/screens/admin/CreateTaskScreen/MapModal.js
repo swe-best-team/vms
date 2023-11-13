@@ -5,7 +5,7 @@ import { Modal, StyleSheet, View } from 'react-native'
 import MapView, { Marker } from 'react-native-maps'
 import { Button } from 'react-native-paper'
 
-const initialRegion = {
+const initialRegion = { // Astana
     latitude: 51.1655,
     longitude: 71.4272,
     latitudeDelta: 0.0001,

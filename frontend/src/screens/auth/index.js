@@ -8,8 +8,7 @@ import {
 import {
     Text,
     TextInput,
-    Button,
-    RadioButton
+    Button
 } from 'react-native-paper'
 import Screen from 'components/Screen'
 
