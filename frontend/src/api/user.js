@@ -23,7 +23,7 @@ export const authenticate = async jwt =>
 
 export const create = async (jwt, user) =>
     await new Promise(async (resolve, reject) => {
-        const response = await api.put('user/create', user, {
+        const response = await api.post('user/create', user, {
             headers: { Authorization: `Bearer ${jwt}` }
         })
         const { success, message } = response.data

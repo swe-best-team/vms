@@ -9,9 +9,11 @@ import RoleView from './RoleView'
 import { ROLES } from 'utils/constants'
 
 import { useAdmin } from 'context/AdminProvider'
+import { useAlert } from 'context/AlertProvider'
 
 const CreateUserScreen = () => {
     const { createUser } = useAdmin()
+    const { activateLoading, stopLoadingAndshowAlert } = useAlert()
 
     const [role, setRole] = useState('')
     const [name, setName] = useState('')
@@ -27,9 +29,16 @@ const CreateUserScreen = () => {
     const licenseVisible = role === ROLES.driver
     const user = { role, name, surname, email, password, confirmPassword, license }
 
-    const create = () => createUser(user).then(() => {
-        console.log('a user created!')
-    }).catch(err => { console.error(err) })
+    const create = () => {
+        activateLoading()
+        createUser(user).then(() => {
+            console.log('a user created!')
+            stopLoadingAndshowAlert(true, 'The user is successfully created!')
+        }).catch(err => {
+            console.error(err)
+            stopLoadingAndshowAlert(false, err)
+        })
+    }
 
     return (
         <ScrollView>

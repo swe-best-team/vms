@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { useAdmin } from 'context/AdminProvider'
+import { useAlert } from 'context/AlertProvider'
 
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
@@ -14,6 +15,7 @@ import CalendarModal from './CalendarModal'
 
 const CreateTaskScreen = () => {
     const { createTask } = useAdmin()
+    const { activateLoading, stopLoadingAndshowAlert } = useAlert()
 
     const [executor, setExecutor] = useState(null)
     const [vehicle, setVehicle] = useState(null)
@@ -31,6 +33,8 @@ const CreateTaskScreen = () => {
         setRoutes([...routes, null])
     }
     const create = () => {
+        activateLoading()
+
         const date = new Date(deadline.timestamp)
         const task = {
             executor: executor._id,
@@ -40,7 +44,11 @@ const CreateTaskScreen = () => {
         }
         createTask(task).then(() => {
             console.log('a task created!')
-        }).catch(err => { console.error(err) })
+            stopLoadingAndshowAlert(true, 'The task is successfully created!')
+        }).catch(err => {
+            console.error(err)
+            stopLoadingAndshowAlert(false, err)
+        })
     }
 
     useEffect(() => {
