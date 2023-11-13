@@ -66,7 +66,12 @@ const styles = StyleSheet.create({
         padding: 5,
         borderWidth: 1,
         borderColor: COLORS.primary,
-        marginVertical: 10
+        marginVertical: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingLeft: 15,
+        paddingVertical: 7
     },
     btn: {
         marginVertical: 10
