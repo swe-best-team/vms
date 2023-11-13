@@ -17,7 +17,7 @@ const AuthContext = createContext()
 const { Provider } = AuthContext
 
 const AuthProvider = ({ children }) => {
-    const serverConnected = false
+    const serverConnected = true
 
     const [loggedIn, setLoggedIn] = useState(false)
     const [user, setUser] = useState(undefined)

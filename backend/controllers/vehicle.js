@@ -58,3 +58,12 @@ exports.remove = async (req, res) => {
         return res.json({ success: true })
     }).catch(() => resError(res, 'Failed to remove a vehicle'))
 }
+
+exports.getAllByDriver = async (req, res) => {
+    const { driverId } = req.params
+    return Vehicle.find({ driver: driverId }).then(vehicles =>
+        res.json({
+            success: true,
+            vehicles
+        })).catch(() => resError(res, 'No vehicles found'))
+}

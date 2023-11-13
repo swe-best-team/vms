@@ -9,6 +9,9 @@ import {
     create as createAPI,
     getAllDrivers as getAllDriversAPI
 } from 'api/user'
+import {
+    getAllByDriver as getAllVehiclesByDriverAPI
+} from 'api/vehicle'
 
 const AdminContext = createContext()
 const { Provider } = AdminContext
@@ -23,11 +26,16 @@ const AdminProvider = ({ children }) => {
         console.log('getting all drivers...')
         return getAllDriversAPI()
     }
+    const getAllVehiclesByDriver = async driverId => {
+        console.log('getting all vehicles by driver...')
+        return getAllVehiclesByDriverAPI(driverId)
+    }
 
     return (
         <Provider
             value={{
-                createUser, getAllDrivers
+                createUser, getAllDrivers,
+                getAllVehiclesByDriver
             }}
         >{children}</Provider>
     )

@@ -14,9 +14,9 @@ exports.checkVal = (req, res, next) => {
 
 }
 
-exports.checkRemove = (req, res, next) => {
+exports.checkId = (req, res, next) => {
     const { id } = req.body
-    if (!id) return resError(res, 'The id field is requuired')
+    if (!id) return resError(res, 'The id field is required')
 
     if (!Types.ObjectId.isValid(id))
         return resError(res, 'The id field must be a valid Mongo Object ID')

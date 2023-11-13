@@ -1,8 +1,8 @@
 import Screen from 'components/Screen'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Modal, StyleSheet, View } from 'react-native'
-import MapView from 'react-native-maps'
+import MapView, { Marker } from 'react-native-maps'
 import { Button } from 'react-native-paper'
 
 const initialRegion = {
@@ -12,9 +12,35 @@ const initialRegion = {
     longitudeDelta: 0.1
 }
 
-const MapModal = ({ visible, setVisible }) => {
+const MapModal = ({ visible, close }) => {
     const map = useRef(null)
 
+    const [markers, setMarkers] = useState([])
+    const [selectSecond, setSelectSecond] = useState(false)
+
+    const btnDisabled = markers.length != 2
+
+    const onMapPress = e => {
+        const coordinate = e.nativeEvent.coordinate
+        if (markers.length == 2) {
+            if (selectSecond)
+                setMarkers([
+                    markers[0],
+                    coordinate
+                ])
+            else
+                setMarkers([
+                    coordinate,
+                    markers[1]
+                ])
+            return setSelectSecond(!selectSecond)
+        }
+
+        setMarkers([
+            ...markers,
+            coordinate
+        ])
+    }
     const zoomIn = () =>
         map?.current?.getCamera().then(cam => {
             if (cam?.altitude)
@@ -36,16 +62,20 @@ const MapModal = ({ visible, setVisible }) => {
         <Modal
             animationType='slide'
             visible={visible}
-            onRequestClose={() => {
-                console.log('Modal has been closed')
-            }}
         >
             <Screen>
                 <MapView
                     style={styles.map}
                     ref={map}
                     initialRegion={initialRegion}
+                    onPress={onMapPress}
                 >
+                    {markers.map((coordinate, i) =>
+                        <Marker
+                            key={i}
+                            coordinate={coordinate}
+                        />
+                    )}
                 </MapView>
                 <View style={styles.zoomView}>
                     <Button
@@ -62,8 +92,14 @@ const MapModal = ({ visible, setVisible }) => {
                 <Button
                     mode='contained'
                     style={styles.close}
-                    onPress={() => { setVisible(false) }}
-                >Choose the location</Button>
+                    disabled={btnDisabled}
+                    onPress={() => {
+                        close({
+                            start: markers[0],
+                            end: markers[1]
+                        })
+                    }}
+                >Choose the route</Button>
             </Screen>
         </Modal>
     )

@@ -9,22 +9,25 @@ import { Button } from 'react-native-paper'
 
 import { COLORS } from 'utils/constants'
 
-const ExecutorModal = ({ visible, setVisible, setExecutor }) => {
+const VehicleModal = ({ visible, setVisible, setVehicle, driver, setVehiclesFound }) => {
     const { serverConnected } = useAuth()
-    const { getAllDrivers } = useAdmin()
+    const { getAllVehiclesByDriver } = useAdmin()
 
-    const [drivers, setDrivers] = useState([])
+    const [vehicles, setVehicles] = useState([])
 
     useEffect(() => {
         if (!serverConnected) return
-        getAllDrivers().then(data => {
-            setDrivers(data)
-            console.log('drivers found!')
-        }).catch(err => { console.error(err) })
-    }, [])
+        getAllVehiclesByDriver(driver._id).then(data => {
+            setVehicles(data)
+            setVehiclesFound(data.length != 0)
+            console.log('vehicles found!')
+        }).catch(err => {
+            console.error(err)
+        })
+    }, [driver])
 
-    const onClose = driver => {
-        setExecutor(driver)
+    const onClose = vehicle => {
+        setVehicle(vehicle)
         setVisible(false)
     }
 
@@ -35,14 +38,14 @@ const ExecutorModal = ({ visible, setVisible, setExecutor }) => {
         >
             <Screen style={styles.container}>
                 <FlatList
-                    data={drivers}
-                    keyExtractor={driver => driver._id}
+                    data={vehicles}
+                    keyExtractor={vehicle => vehicle._id}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             style={styles.option}
                             onPress={() => { onClose(item) }}
                         >
-                            <Text>{item.name} {item.surname}</Text>
+                            <Text>{item.brand} {item.model}</Text>
                         </TouchableOpacity>
                     )}
                 />
@@ -70,4 +73,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ExecutorModal
+export default VehicleModal
