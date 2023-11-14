@@ -64,8 +64,6 @@ const AuthProvider = ({ children }) => {
                     reject(err)
                 })
         })
-
-
     const logout = () => {
         setLoggedIn(false)
         setUser(undefined)

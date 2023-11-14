@@ -2,7 +2,7 @@ import Screen from 'components/Screen'
 import React, { useRef, useState } from 'react'
 
 import { Modal, StyleSheet, View } from 'react-native'
-import MapView, { Marker } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { Button } from 'react-native-paper'
 
 const initialRegion = { // Astana
@@ -65,6 +65,7 @@ const MapModal = ({ visible, close }) => {
         >
             <Screen>
                 <MapView
+                    provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     ref={map}
                     initialRegion={initialRegion}
