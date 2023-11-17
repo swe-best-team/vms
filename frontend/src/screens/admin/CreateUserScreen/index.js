@@ -94,8 +94,7 @@ const CreateUserScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        marginVertical: 20
+        justifyContent: 'center'
     },
     btn: {
         marginTop: 20

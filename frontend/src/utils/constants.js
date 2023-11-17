@@ -1,3 +1,5 @@
+import React from 'react'
+
 export const COLORS = {
     "primary": "rgb(120, 69, 172)",
     "onPrimary": "rgb(255, 255, 255)",

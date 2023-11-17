@@ -63,7 +63,7 @@ const MapModal = ({ visible, close }) => {
             animationType='slide'
             visible={visible}
         >
-            <Screen>
+            <Screen style={styles.container}>
                 <MapView
                     provider={PROVIDER_GOOGLE}
                     style={styles.map}
@@ -107,6 +107,9 @@ const MapModal = ({ visible, close }) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        marginHorizontal: 0
+    },
     map: {
         width: '100%',
         flex: 1

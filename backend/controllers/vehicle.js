@@ -67,3 +67,10 @@ exports.getAllByDriver = async (req, res) => {
             vehicles
         })).catch(() => resError(res, 'No vehicles found'))
 }
+
+exports.getAll = async (req, res) =>
+    Vehicle.find().then(vehicles =>
+        res.json({
+            success: true,
+            vehicles
+        })).catch(() => resError(res, 'No vehicles found'))

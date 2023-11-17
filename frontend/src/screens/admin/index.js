@@ -14,7 +14,8 @@ const AdminScreen = ({ navigation }) => {
         <Screen>
             <Text
                 variant='titleLarge'
-            >Welcome, {name} {surname}!</Text>
+                style={styles.title}
+            >Welcome, admin {name} {surname}!</Text>
             <Button
                 onPress={() => navigation.navigate('CreateUserScreen')}
                 style={styles.btn}
@@ -24,6 +25,10 @@ const AdminScreen = ({ navigation }) => {
                 style={styles.btn}
             >Create a task</Button>
             <Button
+                onPress={() => navigation.navigate('PersonalScreen')}
+                style={styles.btn}
+            >View personal info</Button>
+            <Button
                 onPress={logout}
                 style={styles.btn}
             >Log out</Button>
@@ -32,6 +37,9 @@ const AdminScreen = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+    title: {
+        textAlign: 'center'
+    },
     btn: {
         marginTop: 20
     }

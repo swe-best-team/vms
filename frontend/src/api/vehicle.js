@@ -1,10 +1,10 @@
 import React from 'react'
 import api from 'api'
 
-export const getAllByDriver = async driverId =>
+const getVehicles = async url =>
     await new Promise(async (resolve, reject) => {
         try {
-            const response = await api.get(`vehicle/get/all/${driverId}`)
+            const response = await api.get(url)
             const { success, vehicles, message } = response.data
 
             if (success) resolve(vehicles)
@@ -14,4 +14,8 @@ export const getAllByDriver = async driverId =>
         }
     })
 
-module.exports = { getAllByDriver }
+export const getAllByDriver = async driverId =>
+    getVehicles(`vehicle/get/all/${driverId}`)
+
+export const getAll = async () =>
+    getVehicles('vehicle/get/all/')

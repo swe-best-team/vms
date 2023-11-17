@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { useAuth } from 'context/AuthProvider'
 import { useAdmin } from 'context/AdminProvider'
 
-import { Text, Modal, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
+import { Modal, FlatList, StyleSheet } from 'react-native'
 import Screen from 'components/Screen'
+import Option from 'components/Option'
 import { Button } from 'react-native-paper'
-
-import { COLORS } from 'utils/constants'
 
 const VehicleModal = ({ visible, setVisible, setVehicle, driver, setVehiclesFound }) => {
     const { serverConnected } = useAuth()
@@ -21,9 +20,7 @@ const VehicleModal = ({ visible, setVisible, setVehicle, driver, setVehiclesFoun
             setVehicles(data)
             setVehiclesFound(data.length != 0)
             console.log('vehicles found!')
-        }).catch(err => {
-            console.error(err)
-        })
+        }).catch(err => { console.error(err) })
     }, [driver])
 
     const onClose = vehicle => {
@@ -41,12 +38,10 @@ const VehicleModal = ({ visible, setVisible, setVehicle, driver, setVehiclesFoun
                     data={vehicles}
                     keyExtractor={vehicle => vehicle._id}
                     renderItem={({ item }) => (
-                        <TouchableOpacity
-                            style={styles.option}
+                        <Option
                             onPress={() => { onClose(item) }}
-                        >
-                            <Text>{item.brand} {item.model}</Text>
-                        </TouchableOpacity>
+                            noArrow
+                        >{item.brand} {item.model}</Option>
                     )}
                 />
                 <Button
@@ -60,18 +55,8 @@ const VehicleModal = ({ visible, setVisible, setVehicle, driver, setVehiclesFoun
 
 const styles = StyleSheet.create({
     container: {
-        paddingVertical: 10
-    },
-    option: {
-        padding: 5,
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-        marginVertical: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingLeft: 15,
-        paddingVertical: 7
+        marginVertical: 40,
+        marginHorizontal: 20
     },
     btn: {
         marginVertical: 10

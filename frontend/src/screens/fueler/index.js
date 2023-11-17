@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native'
 import { Text, Button } from 'react-native-paper'
 import Screen from 'components/Screen'
 
-const DriverScreen = ({ navigation }) => {
+const FuelerScreen = ({ navigation }) => {
     const { user, logout } = useAuth()
     const { name, surname } = user
 
@@ -15,11 +15,16 @@ const DriverScreen = ({ navigation }) => {
             <Text
                 variant='titleLarge'
                 style={styles.title}
-            >Welcome, driver {name} {surname}!</Text>
+            >Welcome, fueler {name} {surname}!</Text>
+            <Button
+                onPress={() => { navigation.navigate('CreateFuelingScreen') }}
+                style={styles.btn}
+            >Create a fueling</Button>
             <Button
                 onPress={() => navigation.navigate('PersonalScreen')}
                 style={styles.btn}
             >View personal info</Button>
+
             <Button
                 onPress={logout}
                 style={styles.btn}
@@ -37,4 +42,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default DriverScreen
+export default FuelerScreen

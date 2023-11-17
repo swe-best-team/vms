@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useAdmin } from 'context/AdminProvider'
 import { useAlert } from 'context/AlertProvider'
 
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'
 import Screen from 'components/Screen'
+import Option from 'components/Option'
+
 import MapModal from './MapModal'
 import ExecutorModal from './ExecutorModal'
-
-import { COLORS } from 'utils/constants'
 import VehicleModal from './VehicleModal'
 import CalendarModal from './CalendarModal'
 
@@ -25,7 +25,7 @@ const CreateTaskScreen = () => {
     const [driversVisible, setDriversVisible] = useState(false)
     const [vehiclesVisible, setVehiclesVisible] = useState(false)
     const [vehiclesFound, setVehiclesFound] = useState(false)
-    const [visibleMap, setVisibleMap] = useState(null)
+    const [mapVisible, setMapVisible] = useState(null)
     const [calendarVisible, setCalendarVisible] = useState(false)
     const [createDisabled, setCreateDisabled] = useState(false)
 
@@ -52,6 +52,9 @@ const CreateTaskScreen = () => {
     }
 
     useEffect(() => {
+        setVehicle(null)
+    }, [executor])
+    useEffect(() => {
         setRoutes([])
     }, [vehicle])
     useEffect(() => {
@@ -64,49 +67,43 @@ const CreateTaskScreen = () => {
     }, [routes])
 
     return (
-        <Screen style={styles.container}>
+        <Screen>
             <ExecutorModal
                 visible={driversVisible}
                 setVisible={setDriversVisible}
                 setExecutor={setExecutor}
             />
-            <TouchableOpacity
-                style={styles.option}
+            <Option
                 onPress={() => { setDriversVisible(true) }}
             >
-                <Text>
-                    {executor == null
-                        ? 'Choose a driver'
-                        : `${executor.name} ${executor.surname}`}
-                </Text>
-                <Text style={styles.arrow}>{'>'}</Text>
-            </TouchableOpacity>
-            {executor && <>
-                <VehicleModal
-                    visible={vehiclesVisible}
-                    setVisible={setVehiclesVisible}
-                    setVehicle={setVehicle}
-                    driver={executor}
-                    setVehiclesFound={setVehiclesFound}
-                />
-                <TouchableOpacity
-                    style={styles.option}
-                    onPress={() => {
-                        if (vehiclesFound)
-                            setVehiclesVisible(true)
-                    }}
-                >
-                    <Text>
+                {executor == null
+                    ? 'Choose a driver'
+                    : `${executor.name} ${executor.surname}`}
+            </Option>
+            {executor &&
+                <>
+                    <VehicleModal
+                        visible={vehiclesVisible}
+                        setVisible={setVehiclesVisible}
+                        setVehicle={setVehicle}
+                        driver={executor}
+                        setVehiclesFound={setVehiclesFound}
+                    />
+                    <Option
+                        style={styles.option}
+                        onPress={() => {
+                            if (vehiclesFound)
+                                setVehiclesVisible(true)
+                        }}
+                    >
                         {vehiclesFound
                             ? vehicle == null
                                 ? 'Choose a vehicle'
                                 : `${vehicle.brand} ${vehicle.model}`
                             : 'The selected driver has no vehicles'
                         }
-                    </Text>
-                    <Text style={styles.arrow}>{'>'}</Text>
-                </TouchableOpacity>
-            </>}
+                    </Option>
+                </>}
             {vehicle != null && (
                 <>
                     <CalendarModal
@@ -115,18 +112,14 @@ const CreateTaskScreen = () => {
                         deadline={deadline}
                         setDeadline={setDeadline}
                     />
-                    <TouchableOpacity
-                        style={styles.option}
+                    <Option
                         onPress={() => { setCalendarVisible(true) }}
                     >
-                        <Text>
-                            {deadline == null
-                                ? 'Choose the deadline'
-                                : deadline.dateString
-                            }
-                        </Text>
-                        <Text style={styles.arrow}>{'>'}</Text>
-                    </TouchableOpacity>
+                        {deadline == null
+                            ? 'Choose the deadline'
+                            : deadline.dateString
+                        }
+                    </Option>
                 </>
             )}
             {deadline != null &&
@@ -136,26 +129,22 @@ const CreateTaskScreen = () => {
                         return (
                             <View key={i}>
                                 <MapModal
-                                    visible={visibleMap == i}
+                                    visible={mapVisible == i}
                                     close={selectedRoute => {
                                         let newRoutes = [...routes]
                                         newRoutes[i] = selectedRoute
                                         setRoutes(newRoutes)
-                                        setVisibleMap(null)
+                                        setMapVisible(null)
                                     }}
                                 />
-                                <TouchableOpacity
-                                    style={styles.option}
-                                    onPress={() => { setVisibleMap(i) }}
+                                <Option
+                                    onPress={() => { setMapVisible(i) }}
                                 >
-                                    <Text>
-                                        {routes[i] == null
-                                            ? `Set up route ${order}`
-                                            : `Route ${order} is set`
-                                        }
-                                    </Text>
-                                    <Text style={styles.arrow}>{'>'}</Text>
-                                </TouchableOpacity>
+                                    {routes[i] == null
+                                        ? `Set up route ${order}`
+                                        : `Route ${order} is set`
+                                    }
+                                </Option>
                             </View>
                         )
                     })}
@@ -176,23 +165,6 @@ const CreateTaskScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        paddingVertical: 10
-    },
-    option: {
-        padding: 5,
-        borderWidth: 1,
-        borderColor: COLORS.primary,
-        marginVertical: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingLeft: 15
-    },
-    arrow: {
-        fontSize: 20,
-        color: COLORS.primary
-    },
     btn: {
         marginVertical: 10
     }

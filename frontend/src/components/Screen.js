@@ -16,7 +16,9 @@ const Screen = ({ children, style, ...props }) =>
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 20
+        paddingHorizontal: 20,
+        paddingVertical: 20,
+        backgroundColor: '#fff'
     }
 })
 

@@ -3,6 +3,7 @@ import React from 'react'
 import AdminProvider from 'context/AdminProvider'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
+import PersonalScreen from 'screens/PersonalScreen'
 import AdminScreen from 'screens/admin'
 import CreateUserScreen from 'screens/admin/CreateUserScreen'
 import CreateTaskScreen from 'screens/admin/CreateTaskScreen'
@@ -15,6 +16,11 @@ const AdminNavigator = () =>
         <Navigator
             initialRouteName='AdminScreen'
         >
+            <Screen
+                name='PersonalScreen'
+                component={PersonalScreen}
+                options={{ title: 'Personal Info' }}
+            />
             <Screen
                 name='AdminScreen'
                 component={AdminScreen}

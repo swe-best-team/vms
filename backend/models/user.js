@@ -46,7 +46,7 @@ userSchema.methods.comparePassword = async function (password) {
 }
 
 userSchema.methods.getSafeInfo = function () {
-    const { email, password, updatedAt, createdAt, license, ...safeUserInfo } = this._doc
+    const { __v, password, updatedAt, createdAt, ...safeUserInfo } = this._doc
     return safeUserInfo
 }
 

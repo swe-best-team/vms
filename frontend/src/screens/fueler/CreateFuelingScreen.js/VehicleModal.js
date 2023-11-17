@@ -1,29 +1,31 @@
+import Screen from 'components/Screen'
 import React, { useEffect, useState } from 'react'
 
 import { useAuth } from 'context/AuthProvider'
-import { useAdmin } from 'context/AdminProvider'
+import { useFueler } from 'context/FuelerProvider'
 
-import { Modal, FlatList, StyleSheet } from 'react-native'
-import Screen from 'components/Screen'
+import { StyleSheet, Modal, FlatList } from 'react-native'
+import { Button, Text } from 'react-native-paper'
 import Option from 'components/Option'
-import { Button } from 'react-native-paper'
 
-const ExecutorModal = ({ visible, setVisible, setExecutor }) => {
+const VehicleModal = ({ visible, setVisible, setVehicle, setVehiclesFound }) => {
     const { serverConnected } = useAuth()
-    const { getAllDrivers } = useAdmin()
+    const { getAllVehicles } = useFueler()
 
-    const [drivers, setDrivers] = useState([])
+    const [vehicles, setVehicles] = useState([])
 
     useEffect(() => {
         if (!serverConnected) return
-        getAllDrivers().then(data => {
-            setDrivers(data)
-            console.log('drivers found!')
+        getAllVehicles().then(data => {
+            console.log(data)
+            setVehicles(data)
+            setVehiclesFound(data.length != 0)
+            console.log('vehicles found!')
         }).catch(err => { console.error(err) })
     }, [])
 
-    const onClose = driver => {
-        setExecutor(driver)
+    const onClose = vehicle => {
+        setVehicle(vehicle)
         setVisible(false)
     }
 
@@ -33,14 +35,15 @@ const ExecutorModal = ({ visible, setVisible, setExecutor }) => {
             visible={visible}
         >
             <Screen style={styles.container}>
+                <Text>VehicleModal</Text>
                 <FlatList
-                    data={drivers}
-                    keyExtractor={driver => driver._id}
+                    data={vehicles}
+                    keyExtractor={vehicle => vehicle._id}
                     renderItem={({ item }) => (
                         <Option
                             onPress={() => { onClose(item) }}
                             noArrow
-                        >{item.name} {item.surname}</Option>
+                        >{item.brand} {item.model}</Option>
                     )}
                 />
                 <Button
@@ -62,4 +65,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ExecutorModal
+export default VehicleModal
