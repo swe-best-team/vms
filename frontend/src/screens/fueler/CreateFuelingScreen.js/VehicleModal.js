@@ -1,7 +1,7 @@
 import Screen from 'components/Screen'
 import React, { useEffect, useState } from 'react'
 
-import { useAuth } from 'context/AuthProvider'
+import { useAuth } from 'context'
 import { useFueler } from 'context/FuelerProvider'
 
 import { StyleSheet, Modal, FlatList } from 'react-native'

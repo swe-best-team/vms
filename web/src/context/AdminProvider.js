@@ -3,7 +3,10 @@ import React, {
     useContext
 } from 'react'
 
-import { useAuth } from 'context'
+import { useAuth } from 'context/AuthProvider'
+
+import { Outlet } from 'react-router-dom'
+
 import {
     create as createUserAPI,
     getAllDrivers as getAllDriversAPI
@@ -42,7 +45,9 @@ const AdminProvider = ({ children }) => {
                 createUser, getAllDrivers,
                 getAllVehiclesByDriver, createTask
             }}
-        >{children}</Provider>
+        >
+            <Outlet />
+        </Provider>
     )
 }
 

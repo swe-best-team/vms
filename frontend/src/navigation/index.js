@@ -8,6 +8,8 @@ import AdminNavigator from 'navigation/AdminNavigator'
 import DriverNavigator from 'navigation/DriverNavigator'
 import FuelerNavigator from 'navigation/FuelerNavigator'
 
+import { ROLES } from 'utils/constants'
+
 const RootNavigation = () => {
     const { loggedIn, user } = useAuth()
 
@@ -23,9 +25,9 @@ const RootNavigation = () => {
 
 const getAuthorizedNavigator = role => {
     switch (role) {
-        case 'admin': return AdminNavigator
-        case 'driver': return DriverNavigator
-        case 'fueler': return FuelerNavigator
+        case ROLES.admin: return AdminNavigator
+        case ROLES.driver: return DriverNavigator
+        case ROLES.fueler: return FuelerNavigator
         default: return AuthNavigator
 
     }

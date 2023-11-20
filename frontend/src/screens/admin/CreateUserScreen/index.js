@@ -8,8 +8,8 @@ import RoleView from './RoleView'
 
 import { ROLES } from 'utils/constants'
 
+import { useAlert } from 'context'
 import { useAdmin } from 'context/AdminProvider'
-import { useAlert } from 'context/AlertProvider'
 
 const CreateUserScreen = () => {
     const { createUser } = useAdmin()

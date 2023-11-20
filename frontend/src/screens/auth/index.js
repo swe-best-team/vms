@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
-import { useAuth } from 'context'
-import { useAlert } from 'context/AlertProvider'
+import { useAuth, useAlert } from 'context'
 
 import {
     StyleSheet

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { useAlert } from 'context'
 import { useAdmin } from 'context/AdminProvider'
-import { useAlert } from 'context/AlertProvider'
 
 import { StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-paper'

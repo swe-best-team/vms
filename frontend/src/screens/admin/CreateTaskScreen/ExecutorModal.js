@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { useAuth } from 'context/AuthProvider'
+import { useAuth } from 'context'
 import { useAdmin } from 'context/AdminProvider'
 
 import { Modal, FlatList, StyleSheet } from 'react-native'
