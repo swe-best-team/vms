@@ -1,4 +1,4 @@
-const { Router } = require('express')
+    const { Router } = require('express')
 
 const {
     getAll,
@@ -15,7 +15,7 @@ const {
     valCreate,
     valLogin
 } = require('../middlewares/validation/user')
-const { isLoggedIn, isAdmin } = require('../middlewares/verification/user')
+const { isLoggedIn, isAdmin, isDriver} = require('../middlewares/verification/user')
 
 const router = Router()
 
@@ -27,5 +27,5 @@ router.delete('/delete', valDelete, checkVal, isLoggedIn, isAdmin, userDelete)
 router.post('/login', valLogin, checkVal, login)
 router.post('/logout', isLoggedIn, logout)
 router.post('/authenticate', isLoggedIn, authenticate)
-
+router.post('/generatereport', isisDriver())
 module.exports = router

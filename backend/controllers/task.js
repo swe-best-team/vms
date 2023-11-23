@@ -12,6 +12,10 @@ exports.create = async (req, res) => {
     if (!vehicleFile)
         return resError(res, 'Vehicle not found')
 
+    if (vehicleFile.driver.toString() !== executorFile._id.toString()) {
+        return resError(res, 'The specified vehicle does not belong to the provided driver.');
+    }
+
     const user = req.user // from middleware/validation/user.isLoggedIn()
     const { deadline } = req.body
 
