@@ -46,7 +46,7 @@ const ExecutorModal = ({ visible, setVisible, executor, setExecutor }) => {
                             key={item._id}
                             onClick={() => { onClose(item) }}
                         >
-                            <ListItemText>{item.name}</ListItemText>
+                            <ListItemText>{item.name} {item.surname}</ListItemText>
                         </ListItemButton>
                     )}
                 </List>
