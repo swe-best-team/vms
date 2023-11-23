@@ -15,3 +15,19 @@ export const create = async (jwt, task) =>
             reject(err.message)
         }
     })
+
+export const getByDriver = async jwt =>
+    await new Promise(async (resolve, reject) => {
+        try {
+            const response = await api.post('task/get/all', {}, {
+                headers: { Authorization: `Bearer ${jwt}` }
+            })
+            const { success, message, tasks } = response.data
+
+            console.log(tasks)
+            if (success) resolve(tasks)
+            else reject(message)
+        } catch (err) {
+            reject(err.message)
+        }
+    })
