@@ -165,11 +165,12 @@ exports.generateReport = async (req, res) => {
 
     const vehicles = await Vehicle.find({driver})
     let spendings = []
+    let fuelcost = []
     await vehicles.map(async vehicle => {
         let totalSpent = 0;
         const maintenanceData = await Maintenance.find({vehicle: driver})
         await maintenanceData.map(async m => {
-            const services = await Service.find({vehicle});
+            const services = await Service.find({maintenance:m});
             services.map(service => {
                 totalSpent += service.cost;
             })
@@ -177,7 +178,12 @@ exports.generateReport = async (req, res) => {
 
         spendings.push(totalSpent);
 
-        const fuelingData = await Fueling.find({vehicle : driver})
+        const fuelingData = await Fueling.find({ vehicle: driver })
+        await fuelingData.map(async f => {
+            fuelcost += f.cost;
+        })
+
+        fuelcost.push(fuelcost);
     })
 
 
