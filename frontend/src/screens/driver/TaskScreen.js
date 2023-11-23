@@ -113,7 +113,7 @@ const TaskScreen = () => {
 
           {selectedTask === task._id && (
             <View style={styles.taskDetails}>
-              {/* Display information related to the selected task */}
+              {}
               <Text>{`Task ID: ${task._id}`}</Text>
               <Text>{`Provider: ${task.provider}`}</Text>
               <Text>{`Executor: ${task.executor}`}</Text>
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingTop: 20, // Adjust the top padding as needed
+    paddingTop: 20, 
   },
   heading: {
     fontSize: 24,
