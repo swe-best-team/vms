@@ -8,7 +8,6 @@ const { User, WebToken, Service, Maintenance, Fueling, Task,Route, Vehicle} = re
 
 const { resError } = require('../utils')
 const { ROLENAMES } = require('../utils/constants')
-const {maintenance, user, vehicle} = require("../routers");
 
 const { JWT_TOKEN_SECRET } = process.env
 

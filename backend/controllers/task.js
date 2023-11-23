@@ -19,10 +19,6 @@ exports.create = async (req, res) => {
     if (executorFile._id.valueOf() != vehicleFile.driver.valueOf())
         return resError(res, 'The executor does not own the vehicle')
 
-    if (vehicleFile.driver.toString() !== executorFile._id.toString()) {
-        return resError(res, 'The specified vehicle does not belong to the provided driver.');
-    }
-
     const user = req.user // from middleware/validation/user.isLoggedIn()
     const { deadline } = req.body
 
@@ -87,4 +83,30 @@ exports.removeTask = async id => {
     } catch (err) {
         throw new Error('Failed to remove a task')
     }
+}
+
+exports.getAllByDriver = async (req, res) => {
+    const { _id } = req.user // from middlewares/validation/user.isLoggedIn()
+
+    return await Task.find({ executor: _id })
+        .then(async tasks => {
+            let formattedTasks = []
+            for (const t of tasks) {
+                const p = await User.findById(t.provider)
+                const v = await Vehicle.findById(t.vehicle)
+                const doc = {
+                    provider: `${p.name} ${p.surname}`,
+                    vehicle: `${v.brand} ${v.model}`,
+                    deadline: t.deadline,
+                    completed: t.completed
+                }
+                formattedTasks.push(doc)
+            }
+
+            return res.json({
+                success: true,
+                tasks: formattedTasks
+            })
+        })
+        .catch(err => resError(res, 'Could not get the tasks'))
 }

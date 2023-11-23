@@ -8,7 +8,8 @@ const {
     login,
     logout,
     authenticate,
-    getAllDrivers
+    getAllDrivers,
+    generateReport
 } = require('../controllers/user')
 const { checkVal, checkId } = require('../middlewares/validation')
 const {
@@ -29,5 +30,5 @@ router.delete('/remove', checkId, isLoggedIn, isAdmin, remove)
 router.post('/login', valLogin, checkVal, login)
 router.post('/logout', isLoggedIn, logout)
 router.post('/authenticate', isLoggedIn, authenticate)
-router.post('/generatereport', isisDriver())
+router.post('/generatereport', isDriver, generateReport)
 module.exports = router
