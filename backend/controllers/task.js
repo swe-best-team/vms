@@ -84,3 +84,29 @@ exports.removeTask = async id => {
         throw new Error('Failed to remove a task')
     }
 }
+
+exports.getAllByDriver = async (req, res) => {
+    const { _id } = req.user // from middlewares/validation/user.isLoggedIn()
+
+    return await Task.find({ executor: _id })
+        .then(async tasks => {
+            let formattedTasks = []
+            for (const t of tasks) {
+                const p = await User.findById(t.provider)
+                const v = await Vehicle.findById(t.vehicle)
+                const doc = {
+                    provider: `${p.name} ${p.surname}`,
+                    vehicle: `${v.brand} ${v.model}`,
+                    deadline: t.deadline,
+                    completed: t.completed
+                }
+                formattedTasks.push(doc)
+            }
+
+            return res.json({
+                success: true,
+                tasks: formattedTasks
+            })
+        })
+        .catch(err => resError(res, 'Could not get the tasks'))
+}
