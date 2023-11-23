@@ -15,7 +15,6 @@ exports.create = async (req, res) => {
     const vehicleFile = await Vehicle.findById(vehicle)
     if (!vehicleFile)
         return resError(res, 'Vehicle not found')
-    console.log(executorFile._id, vehicleFile.driver)
     if (executorFile._id.valueOf() != vehicleFile.driver.valueOf())
         return resError(res, 'The executor does not own the vehicle')
 
@@ -98,7 +97,8 @@ exports.getAllByDriver = async (req, res) => {
                     provider: `${p.name} ${p.surname}`,
                     vehicle: `${v.brand} ${v.model}`,
                     deadline: t.deadline,
-                    completed: t.completed
+                    completed: t.completed,
+                    _id: t._id
                 }
                 formattedTasks.push(doc)
             }
