@@ -17,13 +17,22 @@ const { JWT_TOKEN_SECRET } = process.env
 exports.getAll = async (req, res) =>
     await User.find()
         .then(users => {
-            const safeUsersInfo = users.map(user => user.getSafeInfo())
+            const safeUserInfos = users.map(user => user.getSafeInfo())
             return res.json({
                 success: true,
-                users: safeUsersInfo
+                users: safeUserInfos
             })
-        })
-        .catch(() => resError(res, 'No users found'))
+        }).catch(() => resError(res, 'No users found'))
+
+exports.getAllDrivers = async (req, res) =>
+    await User.find({ role: ROLENAMES.driver })
+        .then(drivers => {
+            const safeUserInfos = drivers.map(user => user.getSafeInfo())
+            return res.json({
+                success: true,
+                drivers: safeUserInfos
+            })
+        }).catch(() => resError(res, 'No drivers found'))
 
 exports.getByEmail = async (req, res) => {
     const { email } = req.query
@@ -44,13 +53,18 @@ exports.create = async (req, res) => {
     const { email } = req.body
     const emailFree = await User.isEmailFree(email)
     if (!emailFree)
-        return resError(res, 'Email is already taken')
+        return resError(res, 'The email is already taken')
 
     const { role, name, surname, password, ...rest } = req.body
     let fields = { role, email, name, surname, password }
 
-    if (role == ROLENAMES.driver && rest.license)
-        fields.license = rest.license
+    if (role == ROLENAMES.driver && rest.license) {
+        const license = rest.license
+        const licensedUser = await User.findOne({ license })
+
+        if (licensedUser) return resError(res, 'The license is already taken')
+        fields.license = license
+    }
 
     const user = await User(fields)
     return user.save().then(() => {
@@ -109,12 +123,12 @@ exports.authenticate = async (req, res) => {
     })
 }
 
-exports.userDelete = async (req, res) => {
-    const { _id } = req.body
+exports.remove = async (req, res) => {
+    const { id } = req.body
 
-    return User.findByIdAndDelete(_id).then(doc => {
+    return User.findByIdAndDelete(id).then(doc => {
         const { email } = doc
-        console.error(`User ${email} is deleted from the DB`)
+        console.error(`User ${email} is removed from the DB`)
 
         return res.json({ success: true })
     }).catch(() => resError(res, 'Failed to delete the user'))

@@ -29,7 +29,7 @@ exports.create = async (req, res) => {
     }
 
     const { services } = req.body
-    await services.map(async service => {
+    for (const service of services) {
         const data = {
             maintenance: maintenanceFile._id,
             ...service
@@ -42,9 +42,37 @@ exports.create = async (req, res) => {
             .catch(() =>
                 resError(res, `Failed to save service ${title}`)
             )
-    })
+    }
 
     return res.json({
         success: true
     })
+}
+
+exports.remove = async (req, res) => {
+    const { id } = req.body
+    const { email } = req.user
+
+    console.log(`${email} is trying to remove a maintenance...`)
+
+    try { await this.removeMaintenance(id) }
+    catch (err) { return resError(res, err.msg) }
+
+    return res.json({ success: true })
+}
+
+exports.removeMaintenance = async id => {
+    try {
+        await Service.deleteMany({ maintenance: id })
+        console.log('All the attached services are removed')
+    } catch (err) {
+        throw new Error('Failed to remove the attached services')
+    }
+
+    try {
+        const { date } = await Maintenance.findByIdAndDelete(id)
+        console.log(`Successfully remove the maintenance of ${date}`)
+    } catch (err) {
+        throw new Error('Failed to remove a maintenance')
+    }
 }

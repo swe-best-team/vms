@@ -1,26 +1,32 @@
 import React from 'react'
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import AccountScreen from 'screens/driver/AccountScreen'
-import CarScreen from 'screens/driver/CarScreen'
+import PersonalScreen from 'screens/PersonalScreen'
+import DriverScreen from 'screens/driver'
+import VehicleScreen from 'screens/driver/VehicleScreen'
 
-const Tab = createBottomTabNavigator()
+const Tab = createNativeStackNavigator()
 const { Screen, Navigator } = Tab
 
 const DriverNavigator = () =>
     <Navigator
-        initialRouteName='AccountScreen'
+        initialRouteName='DriverScreen'
     >
         <Screen
-            name='AccountScreen'
-            component={AccountScreen}
-            options={{ title: 'Account' }}
+            name='PersonalScreen'
+            component={PersonalScreen}
+            options={{ title: 'Personal Info' }}
         />
         <Screen
-            name='CarScreen'
-            component={CarScreen}
-            options={{ title: 'Car' }}
+            name='DriverScreen'
+            component={DriverScreen}
+            options={{ title: 'Driver' }}
+        />
+        <Screen
+            name='VehicleScreen'
+            component={VehicleScreen}
+            options={{ title: 'Vehicle' }}
         />
     </Navigator>
 

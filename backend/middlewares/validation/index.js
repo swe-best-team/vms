@@ -14,9 +14,16 @@ exports.checkVal = (req, res, next) => {
 
 }
 
-exports.valDelete = [
-    check('_id').exists().withMessage('The ID is required')
-]
+exports.checkId = (req, res, next) => {
+    const { id } = req.body
+    if (!id) return resError(res, 'The id field is required')
+
+    if (!Types.ObjectId.isValid(id))
+        return resError(res, 'The id field must be a valid Mongo Object ID')
+
+    console.log(`A request on ${req.originalUrl} successfully validated`)
+    return next()
+}
 
 exports.checkRequiredArray = fieldname => this.checkRequired(fieldname)
     .custom(array => Array.isArray(array) && array.length > 0)
@@ -24,7 +31,7 @@ exports.checkRequiredArray = fieldname => this.checkRequired(fieldname)
 
 exports.checkRequiredID = fieldname => this.checkRequiredString(fieldname)
     .custom(id => Types.ObjectId.isValid(id))
-    .withMessage('The vehicle field must be a valid Mongo Object ID')
+    .withMessage(`The ${fieldname} field must be a valid Mongo Object ID`)
 
 exports.checkRequiredString = fieldname => this.checkRequired(fieldname)
     .trim().notEmpty().withMessage(`The ${fieldname} field cannot be empty`)

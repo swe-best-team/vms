@@ -5,8 +5,8 @@ exports.create = async (req, res) => {
     const { vehicle } = req.body
 
     const vehicleFile = await Vehicle.findById(vehicle)
-        if (!vehicleFile)
-            return resError(res, 'Vehicle not found')
+    if (!vehicleFile)
+        return resError(res, 'Vehicle not found')
 
     const user = req.user // from middleware/validation/user.isLoggedIn()
     const { date, station, volume, cost, proof } = req.body
@@ -25,4 +25,27 @@ exports.create = async (req, res) => {
             success: true
         })
     }).catch(() => resError(res, `Failed to fuel ${vehicleFile.brand} ${vehicleFile.model} by ${user.email}`))
+}
+
+exports.remove = async (req, res) => {
+    const { id } = req.body
+    const { email } = req.user
+
+    console.log(`${email} is trying to remove a fueling...`)
+
+    try { this.removeFueling(id) }
+    catch (err) { return resError(res, err.msg) }
+
+    return res.json({ success: true })
+}
+
+exports.removeFueling = async id => {
+    try {
+        const doc = await Fueling.findByIdAndDelete(id)
+
+        const { brand, model } = doc
+        console.log(`Successfully removed the fueling of ${brand} ${model}`)
+    } catch (err) {
+        throw new Error('Failed to remove a fueling')
+    }
 }

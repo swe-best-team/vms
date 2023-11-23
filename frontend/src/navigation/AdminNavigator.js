@@ -1,23 +1,42 @@
 import React from 'react'
-import { View, Text } from 'react-native'
 
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HelloScreen from 'screens/admin/HelloScreen'
+import AdminProvider from 'context/AdminProvider'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-const Tab = createBottomTabNavigator()
+import PersonalScreen from 'screens/PersonalScreen'
+import AdminScreen from 'screens/admin'
+import CreateUserScreen from 'screens/admin/CreateUserScreen'
+import CreateTaskScreen from 'screens/admin/CreateTaskScreen'
+
+const Tab = createNativeStackNavigator()
 const { Screen, Navigator } = Tab
 
-const AdminNavigator = () => {
-    return (
+const AdminNavigator = () =>
+    <AdminProvider>
         <Navigator
-            initialRouteName='HelloScreen'
+            initialRouteName='AdminScreen'
         >
             <Screen
-                name='HelloScreen'
-                component={HelloScreen}
+                name='PersonalScreen'
+                component={PersonalScreen}
+                options={{ title: 'Personal Info' }}
+            />
+            <Screen
+                name='AdminScreen'
+                component={AdminScreen}
+                options={{ title: 'Admin' }}
+            />
+            <Screen
+                name='CreateUserScreen'
+                component={CreateUserScreen}
+                options={{ title: 'Create a user' }}
+            />
+            <Screen
+                name='CreateTaskScreen'
+                component={CreateTaskScreen}
+                options={{ title: 'Create a task' }}
             />
         </Navigator>
-    )
-}
+    </AdminProvider>
 
 export default AdminNavigator
