@@ -29,7 +29,7 @@ const AuthScreen = () => {
     }
 
     return (
-        <Screen>
+        <Screen maxWidth='xs'>
             <Typography component='h1' variant='h5' sx={{ textAlign: 'center' }}>
                 Input your credentials
             </Typography>

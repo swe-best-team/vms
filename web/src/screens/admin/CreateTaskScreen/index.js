@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react'
 
 import { useAlert } from 'context'
 import { useAdmin } from 'context/AdminProvider'
+import { useNavigate } from 'react-router-dom'
 
 import { Link } from 'react-router-dom'
 import Screen from 'components/Screen'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-
 import ExecutorModal from './ExecutorModal'
 import VehicleModal from './VehicleModal'
 import CalendarModal from './CalendarModal'
 import MapModal from './MapModal'
+import AddIcon from '@mui/icons-material/Add'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 const CreateTaskScreen = () => {
     const { createTask } = useAdmin()
     const { activateLoading, stopLoadingAndShowAlert } = useAlert()
+    const navigate = useNavigate()
 
     const [executor, setExecutor] = useState(null)
     const [vehicle, setVehicle] = useState(null)
@@ -51,9 +54,10 @@ const CreateTaskScreen = () => {
             deadline: deadline.toISOString(),
             routes
         }
-        console.log(task)
+
         createTask(task).then(() => {
             console.log('a task created!')
+            navigate('/')
             stopLoadingAndShowAlert(true, 'The task is successfully created!')
         }).catch(err => {
             console.error(err)
@@ -62,9 +66,12 @@ const CreateTaskScreen = () => {
     }
 
     return (
-        <Screen>
-            <Typography component='h1' variant='h5' sx={{ textAlign: 'center' }}>
+        <Screen maxWidth='xs'>
+            <Typography variant='h5' sx={styles.heading}>
                 Create a task
+            </Typography>
+            <Typography variant='p' sx={styles.subheading}>
+                The necessary inputs will pop up as you continue.
             </Typography>
             <ExecutorModal
                 visible={executorShown}
@@ -74,12 +81,18 @@ const CreateTaskScreen = () => {
             />
             <Box sx={styles.section}>
                 <Button
-                    variant='contained'
+                    variant='text'
+                    color={executor == null ? 'primary' : 'secondary'}
                     sx={{ mt: 3, mb: 2 }}
                     onClick={() => { setExecutorShown(true) }}
-                >Choose a driver</Button>
+                >
+                    {executor == null
+                        ? 'Choose a driver'
+                        : 'Driver chosen'
+                    }
+                </Button>
                 {executor != null &&
-                    <Typography component='p'>
+                    <Typography component='p' sx={styles.label}>
                         {executor.name} {executor.surname}
                     </Typography>
                 }
@@ -96,12 +109,18 @@ const CreateTaskScreen = () => {
                     />
                     <Box sx={styles.section}>
                         <Button
-                            variant='contained'
+                            variant='text'
+                            color={vehicle == null ? 'primary' : 'secondary'}
                             sx={{ mt: 3, mb: 2 }}
                             onClick={() => { setVehicleShown(true) }}
-                        >Choose a vehicle</Button>
+                        >
+                            {vehicle == null
+                                ? 'Choose a vehicle'
+                                : 'Vehicle chosen'
+                            }
+                        </Button>
                         {vehicle != null &&
-                            <Typography component='p'>
+                            <Typography component='p' sx={styles.label}>
                                 {!vehiclesFound
                                     ? 'The selected driver has no vehicles'
                                     : vehicle != null && `${vehicle.brand} ${vehicle.model}`
@@ -121,11 +140,12 @@ const CreateTaskScreen = () => {
                     />
                     <Box sx={styles.section}>
                         <Button
-                            variant='contained'
+                            variant='text'
+                            color={deadline == null ? 'primary' : 'secondary'}
                             sx={{ mt: 3, mb: 2 }}
                             onClick={() => { setCalendarShown(true) }}
                         >Select the deadline</Button>
-                        <Typography component='p'>
+                        <Typography component='p' sx={styles.label}>
                             {deadline.toLocaleString('en-KZ', {
                                 day: 'numeric',
                                 month: 'long',
@@ -150,7 +170,8 @@ const CreateTaskScreen = () => {
                                 />
                                 <Box sx={styles.section}>
                                     <Button
-                                        variant='contained'
+                                        variant='text'
+                                        color={routeSet ? 'secondary' : 'primary'}
                                         sx={{ mt: 3, mb: 2 }}
                                         onClick={() => { setMapVisible(i) }}
                                     >
@@ -164,9 +185,10 @@ const CreateTaskScreen = () => {
                         )
                     })}
                     <Button
-                        variant='contained'
+                        variant='outlined'
                         sx={{ mt: 3, mb: 2 }}
                         onClick={addRoute}
+                        startIcon={<AddIcon />}
                     >Add a route</Button>
                 </>
             }
@@ -178,10 +200,10 @@ const CreateTaskScreen = () => {
             >Create</Button>
             <Link to='/'>
                 <Button
-                    type='submit'
                     fullWidth
-                    variant='contained'
+                    variant='outlined'
                     sx={{ mt: 3, mb: 2 }}
+                    startIcon={<ArrowBackIcon />}
                 >Go back</Button>
             </Link>
         </Screen>
@@ -196,6 +218,21 @@ const styles = {
         alignItems: 'center',
         justifyContent: 'space-between'
     },
+    heading: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        mb: 3
+    },
+    subheading: {
+        mb: 5,
+        fontSize: 20,
+        textAlign: 'center',
+        opacity: 0.8
+    },
+    label: {
+        fontWeight: 500,
+        fontSize: 18
+    }
 }
 
 export default CreateTaskScreen

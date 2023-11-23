@@ -4,9 +4,9 @@ import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
 import Box from '@mui/material/Box'
 
-const Screen = ({ children }) => {
+const Screen = ({ children, ...props }) => {
     return (
-        <Container component='main' maxWidth='xs'>
+        <Container component='main' {...props}>
             <CssBaseline />
             <Box
                 sx={{
