@@ -21,9 +21,14 @@ const DriverScreen = ({ navigation }) => {
                 style={styles.btn}
             >View personal info</Button>
             <Button
+                onPress={() => navigation.navigate('TaskScreen')}
+                style={styles.btn}
+            >Tasks</Button>
+            <Button
                 onPress={logout}
                 style={styles.btn}
             >Log out</Button>
+            
         </Screen>
     )
 }

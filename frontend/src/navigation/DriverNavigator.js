@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import PersonalScreen from 'screens/PersonalScreen'
 import DriverScreen from 'screens/driver'
 import VehicleScreen from 'screens/driver/VehicleScreen'
+import TaskScreen from 'screens/driver/TaskScreen'
+
 
 const Tab = createNativeStackNavigator()
 const { Screen, Navigator } = Tab
@@ -27,6 +29,11 @@ const DriverNavigator = () =>
             name='VehicleScreen'
             component={VehicleScreen}
             options={{ title: 'Vehicle' }}
+        />
+         <Screen
+            name='TaskScreen'
+            component={TaskScreen}
+            options={{ title: 'Tasks' }}
         />
     </Navigator>
 
