@@ -12,7 +12,8 @@ import {
     getAllDrivers as getAllDriversAPI
 } from 'api/user'
 import {
-    getAllByDriver as getAllVehiclesByDriverAPI
+    getAllByDriver as getAllVehiclesByDriverAPI,
+    createByAdmin as createVehicleAPI
 } from 'api/vehicle'
 import { create as createTaskAPI } from 'api/task'
 
@@ -38,12 +39,17 @@ const AdminProvider = ({ children }) => {
         console.log('creating a new task...')
         return createTaskAPI(webToken, task)
     }
+    const createVehicle = async vehicle => {
+        console.log('creating a new vehicle...')
+        return createVehicleAPI(webToken, vehicle)
+    }
 
     return (
         <Provider
             value={{
                 createUser, getAllDrivers,
-                getAllVehiclesByDriver, createTask
+                getAllVehiclesByDriver, createTask,
+                createVehicle
             }}
         >
             <Outlet />

@@ -193,6 +193,7 @@ const CreateTaskScreen = () => {
                 </>
             }
             <Button
+                fullWidth
                 variant='contained'
                 sx={{ mt: 3, mb: 2 }}
                 onClick={create}
@@ -200,7 +201,6 @@ const CreateTaskScreen = () => {
             >Create</Button>
             <Link to='/'>
                 <Button
-                    fullWidth
                     variant='outlined'
                     sx={{ mt: 3, mb: 2 }}
                     startIcon={<ArrowBackIcon />}
@@ -224,7 +224,6 @@ const styles = {
         mb: 3
     },
     subheading: {
-        mb: 5,
         fontSize: 20,
         textAlign: 'center',
         opacity: 0.8

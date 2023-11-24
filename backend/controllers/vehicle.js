@@ -1,4 +1,4 @@
-const { Vehicle, Maintenance, Task, Fueling } = require('../models')
+const { Vehicle, Maintenance, Task, Fueling, User } = require('../models')
 const { resError } = require('../utils')
 
 const { removeMaintenance } = require('./maintenance')
@@ -74,3 +74,27 @@ exports.getAll = async (req, res) =>
             success: true,
             vehicles
         })).catch(() => resError(res, 'No vehicles found'))
+
+exports.createAdmin = async (req, res) => {
+    const user = req.user // from middleware/validation/user.isLoggedIn()
+
+    const { driver } = req.body
+    const driverFile = await User.findById(driver)
+    if (!driverFile)
+        return resError(res, 'Driver not found')
+
+    const { brand, model, capacity, year } = req.body
+    const fields = {
+        driver: driverFile._id,
+        brand, model, capacity, year
+    }
+    const vehicle = await Vehicle(fields)
+
+    return vehicle.save().then(() => {
+        console.log(`Vehicle ${brand} ${model} created by ${user.email}`)
+
+        return res.json({
+            success: true
+        })
+    }).catch(() => resError(res, `Failed to create ${brand} ${model} by ${user.email}`))
+}

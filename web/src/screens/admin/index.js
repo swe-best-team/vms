@@ -13,13 +13,18 @@ import LogoutIcon from '@mui/icons-material/Logout'
 const actions = [
     {
         title: 'Create a user',
-        description: 'Create a new account for users so that they can log in by their own',
+        description: 'Create a new account for users so that they can log in by their own.',
         location: '/create/user'
     },
     {
         title: 'Create a task',
-        description: 'Assign routes to a driver that he will have to take',
+        description: 'Assign a task with routes to specific driver that he will have to take.',
         location: '/create/task'
+    },
+    {
+        title: 'Create a vehicle',
+        description: 'Add and assign a vehicle of a driver to the system.',
+        location: '/create/vehicle'
     }
 ]
 

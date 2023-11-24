@@ -30,8 +30,11 @@ const AuthScreen = () => {
 
     return (
         <Screen maxWidth='xs'>
-            <Typography component='h1' variant='h5' sx={{ textAlign: 'center' }}>
+            <Typography variant='h4' sx={styles.heading}>
                 Input your credentials
+            </Typography>
+            <Typography variant='p' sx={styles.subheading}>
+                Note that accounts are added by an admin user only
             </Typography>
             <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                 <TextField
@@ -65,6 +68,20 @@ const AuthScreen = () => {
             </Box>
         </Screen>
     )
+}
+
+const styles = {
+    heading: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        mb: 3
+    },
+    subheading: {
+        mb: 5,
+        fontSize: 20,
+        textAlign: 'center',
+        opacity: 0.8
+    }
 }
 
 export default AuthScreen

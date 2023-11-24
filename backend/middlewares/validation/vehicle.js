@@ -1,4 +1,4 @@
-const { checkRequiredString, checkRequiredDecimal } = require('.')
+const { checkRequiredString, checkRequiredDecimal, checkRequiredID } = require('.')
 
 exports.valCreate = [
     checkRequiredString('brand'),
@@ -8,4 +8,10 @@ exports.valCreate = [
     checkRequiredDecimal('capacity'),
 
     checkRequiredDecimal('year')
+]
+
+exports.valCreateAdmin = [
+    ...this.valCreate,
+
+    checkRequiredID('driver')
 ]
