@@ -5,7 +5,8 @@ import React, {
 
 import { useAuth } from 'context'
 import {
-    getByDriver as getTasksByDriverAPI
+    getByDriver as getTasksByDriverAPI,
+    getById as getTaskByIdAPI
 } from 'api/task'
 
 const DriverContext = createContext()
@@ -18,11 +19,15 @@ const DriverProvider = ({ children }) => {
         console.log('getting tasks...')
         return getTasksByDriverAPI(webToken)
     }
+    const getTaskById = async id => {
+        console.log('getting task...')
+        return getTaskByIdAPI(id)
+    }
 
     return (
         <Provider
             value={{
-                getTasksByDriver
+                getTasksByDriver, getTaskById
             }}
         >{children}</Provider>
     )

@@ -26,4 +26,9 @@ const taskSchema = Schema({
     }
 })
 
+taskSchema.methods.getSafeInfo = function () {
+    const { provider, vehicle, deadline, completed, _id } = this._doc
+    return safeUserInfo
+}
+
 module.exports = model('Task', taskSchema)

@@ -41,8 +41,8 @@ const CreateUserScreen = () => {
     }
 
     return (
-        <ScrollView>
-            <Screen style={styles.container}>
+        <Screen style={styles.container}>
+            <ScrollView>
                 <RoleView
                     role={role}
                     setRole={setRole}
@@ -87,8 +87,8 @@ const CreateUserScreen = () => {
                     disabled={btnDisabled}
                     style={styles.btn}
                 >Create</Button>
-            </Screen>
-        </ScrollView>
+            </ScrollView>
+        </Screen>
     )
 }
 

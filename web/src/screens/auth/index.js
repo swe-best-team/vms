@@ -77,7 +77,6 @@ const styles = {
         mb: 3
     },
     subheading: {
-        mb: 5,
         fontSize: 20,
         textAlign: 'center',
         opacity: 0.8

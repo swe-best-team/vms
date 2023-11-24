@@ -7,6 +7,7 @@ import PersonalScreen from 'screens/PersonalScreen'
 import DriverScreen from 'screens/driver'
 import VehicleScreen from 'screens/driver/VehicleScreen'
 import TasksScreen from 'screens/driver/TasksScreen'
+import SingleTaskScreen from 'screens/driver/SingleTaskScreen'
 
 
 const Tab = createNativeStackNavigator()
@@ -36,6 +37,11 @@ const DriverNavigator = () =>
                 name='TasksScreen'
                 component={TasksScreen}
                 options={{ title: 'Tasks' }}
+            />
+            <Screen
+                name='SingleTaskScreen'
+                component={SingleTaskScreen}
+                options={{ title: 'Task' }}
             />
         </Navigator>
     </DriverProvider>

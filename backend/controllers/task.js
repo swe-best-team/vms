@@ -3,6 +3,13 @@ const { resError } = require('../utils')
 
 const { ROLENAMES } = require('../utils/constants')
 
+exports.get = async (req, res) => {
+    const { taskId } = req.params
+    return await Task.findById(taskId)
+        .then(task => res.json({ success: true, task }))
+        .catch(err => resError(res, 'Could not find the task'))
+}
+
 exports.create = async (req, res) => {
     const { executor, vehicle } = req.body
 
@@ -84,22 +91,30 @@ exports.removeTask = async id => {
     }
 }
 
+exports.removeAll = async (req, res) => {
+    return await Task.find().then(async tasks => {
+        await tasks.map(async t => {
+            const { _id } = t
+            await this.removeTask(_id)
+            console.log(`Task ${_id} deleted successfully`)
+        })
+        return res.json({ success: true })
+    }).catch(err => resError(res, 'Failed to find tasks to remove'))
+}
+
 exports.getAllByDriver = async (req, res) => {
     const { _id } = req.user // from middlewares/validation/user.isLoggedIn()
 
     return await Task.find({ executor: _id })
         .then(async tasks => {
+            console.log(tasks)
             let formattedTasks = []
             for (const t of tasks) {
                 const p = await User.findById(t.provider)
                 const v = await Vehicle.findById(t.vehicle)
-                const doc = {
-                    provider: `${p.name} ${p.surname}`,
-                    vehicle: `${v.brand} ${v.model}`,
-                    deadline: t.deadline,
-                    completed: t.completed,
-                    _id: t._id
-                }
+                let doc = t
+                doc.provider = `${p.name} ${p.surname}`
+                doc.vehicle = `${v.brand} ${v.model}`
                 formattedTasks.push(doc)
             }
 
@@ -107,6 +122,20 @@ exports.getAllByDriver = async (req, res) => {
                 success: true,
                 tasks: formattedTasks
             })
-        })
-        .catch(err => resError(res, 'Could not get the tasks'))
+        }).catch(err => resError(res, 'Could not get the tasks of a driver'))
+}
+
+exports.getCurrentByDriver = async (req, res) => {
+    const { _id } = req.user // from middlewarees/validadion/user.isLoggedIn()
+
+    const currentDate = new Date()
+
+    return await Task.find({
+        executor: _id,
+        deadline: { $gte: currentDate },
+        completed: false
+    }).then(tasks => res.json({
+        success: true,
+        tasks
+    })).catch(err => resError(res, 'Could not get the current tasks of a driver'))
 }

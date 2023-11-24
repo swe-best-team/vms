@@ -5,10 +5,10 @@ import { Text } from 'react-native-paper'
 
 import { COLORS } from 'utils/constants'
 
-const Option = ({ onPress, noArrow, children }) => {
+const Option = ({ onPress, noArrow, children, style }) => {
     return (
         <TouchableOpacity
-            style={styles.option}
+            style={[styles.option, style]}
             onPress={onPress}
         >
             <Text style={styles.text}>{children}</Text>
