@@ -25,6 +25,11 @@ const actions = [
         title: 'Create a vehicle',
         description: 'Add and assign a vehicle of a driver to the system.',
         location: '/create/vehicle'
+    },
+    {
+        title: 'View Users',
+        description: 'View the list of users in the system.',
+        location: '/create/view'
     }
 ]
 

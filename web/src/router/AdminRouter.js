@@ -8,6 +8,7 @@ import AdminScreen from 'screens/admin'
 import CreateUserScreen from 'screens/admin/CreateUserScreen'
 import CreateTaskScreen from 'screens/admin/CreateTaskScreen'
 import CreateVehicleScreen from 'screens/admin/CreateVehicleScreen'
+import ViewUsersScreen from 'screens/admin/ViewUsers'
 
 const AdminRouter = createBrowserRouter([
     {
@@ -18,7 +19,8 @@ const AdminRouter = createBrowserRouter([
                 path: '/create', children: [
                     { path: 'user', element: <CreateUserScreen /> },
                     { path: 'task', element: <CreateTaskScreen /> },
-                    { path: 'vehicle', element: <CreateVehicleScreen /> }
+                    { path: 'vehicle', element: <CreateVehicleScreen /> },
+                    { path: 'view', element: <ViewUsersScreen /> }
                 ]
             }
         ]
