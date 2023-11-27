@@ -3,10 +3,11 @@ require('dotenv').config() // for process.env
 const jwt = require('jsonwebtoken')
 const PDFDocument = require('pdfkit');
 const ds = require('fs')
-const Chart = require('chart.js')
-const { User, WebToken, Service, Maintenance, Fueling, Task,Route, Vehicle} = require('../models')
+const path = require('path');
+// const Chart = require('chart.js')
+const { User, WebToken, Service, Maintenance, Fueling, Task, Route, Vehicle } = require('../models')
 
-const { resError } = require('../utils')
+const { resError, calculateDistance } = require('../utils')
 const { ROLENAMES } = require('../utils/constants')
 
 const { JWT_TOKEN_SECRET } = process.env
@@ -133,18 +134,6 @@ exports.remove = async (req, res) => {
     }).catch(() => resError(res, 'Failed to delete the user'))
 }
 
-
-function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the Earth in km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLon = (lon2 - lon1) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distance in km
-}
-
 exports.generateReport = async (req, res) => {
     const user = req.user // from middlewares/validation/user.isLoggedIn()
     const { driver } = req.body
@@ -155,65 +144,105 @@ exports.generateReport = async (req, res) => {
 
     let totalDistance = 0;
     for (const task in tasks) {
-        const routes = await Route.find({ status: 'completed' , active : false})
+        const routes = await Route.find({ status: 'completed', active: false })
         routes.forEach(route => {
             const { start, end } = route.locations;
             totalDistance += calculateDistance(start.latitude, start.longitude, end.latitude, end.longitude);
         });
     }
 
-    const vehicles = await Vehicle.find({driver})
+    const vehicles = await Vehicle.find({ driver })
     let spendings = []
     let fuelcost = []
     await vehicles.map(async vehicle => {
         let totalSpent = 0;
-        const maintenanceData = await Maintenance.find({vehicle: driver})
+        const maintenanceData = await Maintenance.find({ vehicle: driver })
         await maintenanceData.map(async m => {
-            const services = await Service.find({maintenance:m});
+            const services = await Service.find({ maintenance: m });
             services.map(service => {
                 totalSpent += service.cost;
             })
         })
 
         spendings.push(totalSpent);
-
+        let fuelspent
         const fuelingData = await Fueling.find({ vehicle: driver })
         await fuelingData.map(async f => {
-            fuelcost += f.cost;
+            fuelspent += f.cost;
         })
 
-        fuelcost.push(fuelcost);
+        fuelcost.push(fuelspent);
+
+
     })
 
 
 
-    const doc = new PDFDocument();
-    const stream = fs.createWriteStream('driver_report.pdf');
-    doc.pipe(stream);
-
-    doc.text('Driver Report for user: $f{user.name}');
-    doc.text(`Total task assigned: $f{tasks.length}`);
-    const MaintenanceCost = new Chart(doc, 'bar', {
-        data: {
-            labels: vehicles.map(item => `${item.brand} ${item.model}`),
-            datasets:[{
-                label: "Money spent on Maintenance",
-                data: spendings,
-            }],
+    const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
+    const PDFDocument = require('pdfkit');
+    const fs = require('fs');
+    
+    const width = 800; // Width of the chart
+    const height = 600; // Height of the chart
+    
+    const totalDistances = [200, 220, 150]; // Replace with your actual distances
+    const driverLabels = totalDistances.map((_, index) => `Driver ${index + 1}`);
+    
+    const chartOptions = {
+      type: 'bar',
+      data: {
+        labels: driverLabels,
+        datasets: [{
+          label: 'Total Distance Covered',
+          data: totalDistances,
+          backgroundColor: 'rgba(0, 123, 255, 0.5)',
+          borderColor: 'rgba(0, 123, 255, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
         },
-    });
+        plugins: {
+          legend: {
+            display: true
+          }
+        }
+      }
+    };
+    
+    const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
+    
+    (async () => {
+      // Create chart as a buffer
+      const chartBuffer = await chartJSNodeCanvas.renderToBuffer(chartOptions);
+    
+      // Create a PDF document
+      const doc = new PDFDocument({ size: [width, height] });
+      const stream = fs.createWriteStream('driversDistanceChart.pdf');
+      doc.pipe(stream);
+    
+      // Embed the chart image into the PDF
+      doc.image(chartBuffer, 0, 0, { width, height });
+    
+      // Finalize the PDF and end the stream
+      doc.end();
+    })();
 
-    const FuelingVolume = new Chart(doc, 'bar', {
-        data: {
-            labels: task.map(item => item.date.toISOString()),
-            datasets: [{
-                label: "Amount of spent fuel",
-                data: fuelingData.map(fuelingData => fuelingData.volume),
-            }],
-        },
-    });
-    doc.image(MaintenanceCost.toBase64Image(),10, 600, {width: 300});
-    doc.image(FuelingVolume.toBase64Image(), 10, 600, {width: 300} );
+    try {
+        // const pdfPath = await exports.generateReport();
+        return res.sendFile(path.join(__dirname,'..', 'driversDistanceChart.pdf'));
+    } catch (error) {
+        console.error(error);
+        return resError(res, 'Error generating pdf')
+    }
+    
 
-    doc.end();
+    return res.json({
+        success: true,
+
+    })
 }
