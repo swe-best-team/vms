@@ -30,5 +30,5 @@ router.delete('/remove', checkId, isLoggedIn, isAdmin, remove)
 router.post('/login', valLogin, checkVal, login)
 router.post('/logout', isLoggedIn, logout)
 router.post('/authenticate', isLoggedIn, authenticate)
-router.post('/generatereport', isDriver, generateReport)
+router.post('/generatereport', isLoggedIn, isDriver, generateReport)
 module.exports = router

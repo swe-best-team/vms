@@ -18,7 +18,8 @@ const styles = {
         textAlign: 'center',
         fontWeight: 'bold',
         marginBottom: 10,
-        fontSize: '2.5rem',
+        //fontSize: '2.5rem',
+        mb: 3
     },
     listItem: {
         width: '100%',

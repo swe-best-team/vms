@@ -1,5 +1,11 @@
 const { Schema, SchemaTypes, model } = require('mongoose')
 
+const fileSchema = Schema({
+    filename: {type: String, required: true},
+    file: {data: Buffer,
+        contentType: String}
+})
+
 const fuelingSchema = Schema({
     vehicle: {
         type: SchemaTypes.ObjectId,
@@ -27,7 +33,10 @@ const fuelingSchema = Schema({
         type: Number,
         required: true
     },
-    proof: String // optional
+    proof: {
+        type: fileSchema,
+    },
+// optional
 })
 
 module.exports = model('Fueling', fuelingSchema)
