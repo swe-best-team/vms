@@ -9,8 +9,8 @@ exports.create = async (req, res) => {
         return resError(res, 'Vehicle not found')
 
     const user = req.user // from middleware/validation/user.isLoggedIn()
-    const { date, station, volume, cost, proof } = req.body
-    const fields = { date, station, volume, cost, proof }
+    const { station, volume, cost, proof } = req.body
+    const fields = { station, volume, cost, proof }
 
     const fueling = await Fueling({
         vehicle: vehicleFile._id,
