@@ -1,4 +1,4 @@
-const { Vehicle, Fueling } = require('../models')
+const { Vehicle, Fueling, Maintenance} = require('../models')
 const { resError } = require('../utils')
 
 exports.create = async (req, res) => {
@@ -25,6 +25,23 @@ exports.create = async (req, res) => {
             success: true
         })
     }).catch(() => resError(res, `Failed to fuel ${vehicleFile.brand} ${vehicleFile.model} by ${user.email}`))
+}
+
+exports.getAllByFueling = async (req, res) => {
+    try{
+    const { fuelerId } = req.params
+    const fuelers = await Fueling.find({ fueler: fuelerId });
+
+    if (fuelers.length === 0) {
+        return resError(res, 'No fuelers found');
+    }
+    return res.json({
+        success: true,
+        fuelers
+    });
+} catch (error) {
+    return resError(res, 'Error retrieving fuelers by ID');
+}
 }
 
 exports.remove = async (req, res) => {

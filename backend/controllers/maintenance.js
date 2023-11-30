@@ -1,7 +1,7 @@
 const {
     Vehicle,
     Maintenance,
-    Service
+    Service, Task, Route
 } = require('../models')
 const { resError } = require('../utils')
 
@@ -83,5 +83,24 @@ exports.removeMaintenance = async id => {
         console.log(`Successfully remove the maintenance of ${date}`)
     } catch (err) {
         throw new Error('Failed to remove a maintenance')
+    }
+}
+
+exports.getCurrentByMaintainer = async (req, res) => {
+    // from middlewarees/validadion/user.isLoggedIn()
+    try {
+        const services = await Service.find({});
+        const maintenanceIds = services.map((service) => service.maintenance);
+        const maintenances = await Maintenance.find({ _id: { $in: maintenanceIds } });
+        if (!maintenances) {
+            return resError(res, 'Maintenance not found');
+        }
+
+        return res.json({
+            success: true,
+            tasks: maintenances, services
+        })
+    } catch (err) {
+        return resError(res, 'Could not get maintenance with details');
     }
 }

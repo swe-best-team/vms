@@ -185,13 +185,4 @@ exports.getCurrentByDriver = async (req, res) => {
     }catch (err) {
         return resError(res, 'Could not get tasks with routes for the executor');
     }
-
-    // return await Task.find({
-    //     executor: _id,
-    //     deadline: { $gte: currentDate },
-    //     completed: false
-    // }).then(tasks => res.json({
-    //     success: true,
-    //     tasks
-    // })).catch(err => resError(res, 'Could not get the current tasks of a driver'))
 }
