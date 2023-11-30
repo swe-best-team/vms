@@ -16,8 +16,8 @@ const AuthScreen = () => {
     const { login } = useAuth()
     const { activateLoading, stopLoading, stopLoadingAndShowAlert } = useAlert()
 
-    const [email, setEmail] = useState('admin@email.com')
-    const [password, setPassword] = useState('alihan123')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
 
     const btnDisabled = !(email && password)
     const onPress = () => {
