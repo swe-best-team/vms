@@ -87,13 +87,9 @@ const CreateMaintenanceScreen = () => {
         onPress={create}
         disabled={btnDisabled}
         style={styles.btn}
-      />
-        <Button
-                mode='contained'
-                onPress={create}
-                disabled={btnDisabled}
-                style={styles.btn}
-            >Create </Button>
+      >
+        Create Maintenance
+      </Button>
     </Screen>
   )
 }
