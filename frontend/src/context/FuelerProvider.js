@@ -1,24 +1,34 @@
 import React, {
     createContext,
-    useContext,
-    useState,
-    useEffect
+    useContext
 } from 'react'
 
-import { getAll as getAllVehiclesAPI } from 'api/vehicle'
+import {
+    getAll as getAllVehiclesAPI
+} from 'api/vehicle'
+import {
+    create as createFuelingAPI
+} from 'api/fueling'
+import { useAuth } from 'context'
 
 const FuelerContext = createContext()
 const { Provider } = FuelerContext
 
 const FuelerProvider = ({ children }) => {
+    const { webToken } = useAuth()
+
     const getAllVehicles = async () => {
         console.log('getting all vehicles...')
         return getAllVehiclesAPI()
     }
+    const createFueling = async fueling => {
+        console.log('creating a fueling...')
+        return createFuelingAPI(webToken, fueling)
+    }
 
     return (
         <Provider
-            value={{ getAllVehicles }}
+            value={{ getAllVehicles, createFueling }}
         >{children}</Provider>
     )
 }

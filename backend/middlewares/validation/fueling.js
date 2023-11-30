@@ -10,8 +10,6 @@ const {
 exports.valCreate = [
     checkRequiredID('vehicle'),
 
-    checkRequiredDate('date'),
-
     checkRequiredString('station'),
 
     checkRequiredDecimal('volume'),

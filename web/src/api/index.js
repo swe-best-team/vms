@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const baseURL = 'http://13.49.54.238/'
+export const baseURL = 'http://localhost:3000/'
 // use ipconfig in cmd
 
 export default axios.create({ baseURL })
