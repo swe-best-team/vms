@@ -4,7 +4,6 @@ import { useAlert } from 'context'
 import { useAdmin } from 'context/AdminProvider'
 import { useNavigate } from 'react-router-dom'
 
-import { Link } from 'react-router-dom'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import Screen from 'components/Screen'
@@ -16,7 +15,7 @@ import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Radio from '@mui/material/Radio'
 import Grid from '@mui/material/Grid'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import GoBackBtn from 'components/GoBackBtn'
 
 const CreateUserScreen = () => {
     const { createUser } = useAdmin()
@@ -149,14 +148,7 @@ const CreateUserScreen = () => {
                     Create
                 </Button>
             </Box>
-            <Link to='/'>
-                <Button
-                    fullWidth
-                    variant='outlined'
-                    sx={{ mt: 3, mb: 2 }}
-                    startIcon={<ArrowBackIcon />}
-                >Go back</Button>
-            </Link>
+            <GoBackBtn />
         </Screen>
     )
 }

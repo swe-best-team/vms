@@ -12,7 +12,7 @@ exports.valCreate = [
         const { license } = req.body
         if (ROLES.includes(role)) {
             if (role === ROLENAMES.driver)
-                if (!license)
+                if (!license || license.length == 0)
                     throw new Error('License is required for a driver role')
             return true
         }
@@ -34,10 +34,6 @@ exports.valCreate = [
 
     checkRequiredString('surname')
         .isLength({ min: 1, max: 20 }).withMessage('Surname has to contain 1 to 20 characters'),
-
-    check('license').optional()
-        .trim().not().isEmpty().withMessage('The license cannot be empty')
-        .isString().withMessage('The license has to be a string')
 ]
 
 exports.valLogin = [

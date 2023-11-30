@@ -29,7 +29,7 @@ const actions = [
     {
         title: 'View Users',
         description: 'View the list of users in the system.',
-        location: '/create/view'
+        location: '/view/users'
     }
 ]
 
