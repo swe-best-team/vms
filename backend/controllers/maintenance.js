@@ -49,6 +49,15 @@ exports.create = async (req, res) => {
     })
 }
 
+exports.getAllByMaintainer = async (req, res) => {
+    const { maintainerId } = req.params
+    return Maintenance.find({ maintainer: maintainerId }).then(maintainers =>
+        res.json({
+            success: true,
+            maintainers
+        })).catch(() => resError(res, 'No maintainer found'))
+}
+
 exports.remove = async (req, res) => {
     const { id } = req.body
     const { email } = req.user

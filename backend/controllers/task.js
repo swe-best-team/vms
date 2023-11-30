@@ -161,15 +161,37 @@ exports.getAllByDriver = async (req, res) => {
 
 exports.getCurrentByDriver = async (req, res) => {
     const { _id } = req.user // from middlewarees/validadion/user.isLoggedIn()
-
     const currentDate = new Date()
+    try {
+        const tasks = await Task.find({
+            executor: _id,
+            // deadline: {$gte: currentDate},
+            // completed: false
+        });
+        const tasksWithRoutes = await Promise.all(
+            tasks.map(async (task) => {
+                const routes = await Route.find({task: task._id});
+                return {
+                    task,
+                    routes
+                };
+            })
+        );
 
-    return await Task.find({
-        executor: _id,
-        deadline: { $gte: currentDate },
-        completed: false
-    }).then(tasks => res.json({
-        success: true,
-        tasks
-    })).catch(err => resError(res, 'Could not get the current tasks of a driver'))
+        return res.json({
+            success: true,
+            tasks: tasksWithRoutes
+        })
+    }catch (err) {
+        return resError(res, 'Could not get tasks with routes for the executor');
+    }
+
+    // return await Task.find({
+    //     executor: _id,
+    //     deadline: { $gte: currentDate },
+    //     completed: false
+    // }).then(tasks => res.json({
+    //     success: true,
+    //     tasks
+    // })).catch(err => resError(res, 'Could not get the current tasks of a driver'))
 }
