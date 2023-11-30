@@ -4,7 +4,7 @@ import { useAlert } from 'context'
 import { useAdmin } from 'context/AdminProvider'
 import { useNavigate } from 'react-router-dom'
 
-import { Link } from 'react-router-dom'
+import GoBackBtn from 'components/GoBackBtn'
 import Screen from 'components/Screen'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -14,7 +14,6 @@ import VehicleModal from './VehicleModal'
 import CalendarModal from './CalendarModal'
 import MapModal from './MapModal'
 import AddIcon from '@mui/icons-material/Add'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 const CreateTaskScreen = () => {
     const { createTask } = useAdmin()
@@ -199,13 +198,7 @@ const CreateTaskScreen = () => {
                 onClick={create}
                 disabled={createDisabled}
             >Create</Button>
-            <Link to='/'>
-                <Button
-                    variant='outlined'
-                    sx={{ mt: 3, mb: 2 }}
-                    startIcon={<ArrowBackIcon />}
-                >Go back</Button>
-            </Link>
+            <GoBackBtn />
         </Screen>
     )
 }

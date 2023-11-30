@@ -3,14 +3,13 @@ import React, { useState } from 'react'
 import { useAlert } from 'context'
 import { useAdmin } from 'context/AdminProvider'
 
-import { Link } from 'react-router-dom'
 import Screen from 'components/Screen'
 import Button from '@mui/material/Button'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import DriverModal from './DriverModal'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
+import GoBackBtn from 'components/GoBackBtn'
 
 
 const CreateVehicleScreen = () => {
@@ -119,14 +118,7 @@ const CreateVehicleScreen = () => {
           sx={{ mt: 3, mb: 2 }}
         >Create</Button>
       </Box>
-      <Link to='/'>
-        <Button
-          fullWidth
-          variant='outlined'
-          sx={{ mt: 3, mb: 2 }}
-          startIcon={<ArrowBackIcon />}
-        >Go back</Button>
-      </Link>
+      <GoBackBtn />
     </Screen>
   )
 }
