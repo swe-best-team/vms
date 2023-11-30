@@ -87,8 +87,9 @@ export const getAllDrivers = async () =>
 export const remove = async (jwt, _id) =>
     await new Promise(async (resolve, reject) => {
         try {
-            const response = await api.delete('user/delete', { _id }, {
+            const response = await api.delete('user/remove', {
                 headers: { Authorization: `Bearer ${jwt}` },
+                data: { id: _id }
             })
             const { success, message } = response.data
 

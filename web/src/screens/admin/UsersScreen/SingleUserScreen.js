@@ -1,15 +1,34 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import Screen from 'components/Screen'
 import GoBackBtn from 'components/GoBackBtn'
 import Field from 'components/Field'
 import { Button } from '@mui/material'
+import { useAdmin } from 'context/AdminProvider'
+import { useAlert } from 'context'
 
 const SingleUserScreen = () => {
+    const navigate = useNavigate()
     const { state } = useLocation()
     const { user } = state
+
+    const { removeUser } = useAdmin()
+    const { activateLoading, stopLoadingAndShowAlert, stopLoading } = useAlert()
+
+    const remove = () => {
+        activateLoading()
+
+        removeUser(user._id).then(() => {
+            console.log('the user removed!')
+            stopLoading()
+            navigate('/view/users')
+        }).catch(err => {
+            console.error(err)
+            stopLoadingAndShowAlert(false, err)
+        })
+    }
 
     return (
         <Screen>
@@ -21,9 +40,11 @@ const SingleUserScreen = () => {
                 />
             )}
             <p></p>
-            <Button style = {{backgroundColor: 'red', color: 'white'}}>Delete the user</Button>
+            <Button
+                style={{ backgroundColor: 'red', color: 'white' }}
+                onClick={remove}
+            >Delete the user</Button>
             <GoBackBtn />
-            
         </Screen>
     )
 }

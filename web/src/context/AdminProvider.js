@@ -10,7 +10,8 @@ import { Outlet } from 'react-router-dom'
 import {
     create as createUserAPI,
     getAllDrivers as getAllDriversAPI,
-    getAll as getAllUsersAPI
+    getAll as getAllUsersAPI,
+    remove as removeUserAPI
 } from 'api/user'
 import {
     getAllByDriver as getAllVehiclesByDriverAPI,
@@ -48,13 +49,17 @@ const AdminProvider = ({ children }) => {
         console.log('getting all users...')
         return getAllUsersAPI()
     }
+    const removeUser = async userId => {
+        console.log('removing user...')
+        return removeUserAPI(webToken, userId)
+    }
 
     return (
         <Provider
             value={{
                 createUser, getAllDrivers,
                 getAllVehiclesByDriver, createTask,
-                createVehicle, getAllUsers
+                createVehicle, getAllUsers, removeUser
             }}
         >
             <Outlet />
