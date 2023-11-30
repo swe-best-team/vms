@@ -1,31 +1,29 @@
-import Screen from 'components/Screen'
 import React, { useEffect, useState } from 'react'
 
 import { useAuth } from 'context'
+
+import { Modal, FlatList, StyleSheet } from 'react-native'
+import Screen from 'components/Screen'
+import Option from 'components/Option'
+import { Button } from 'react-native-paper'
 import { useFueler } from 'context/FuelerProvider'
 
-import { StyleSheet, Modal, FlatList } from 'react-native'
-import { Button, Text } from 'react-native-paper'
-import Option from 'components/Option'
-
-const VehicleModal = ({ visible, setVisible, driver, setVehicle, setVehiclesFound }) => {
+const DriverModal = ({ visible, setVisible, setDriver }) => {
     const { serverConnected } = useAuth()
-    const { getAllVehiclesByDriver } = useFueler()
+    const { getAllDrivers } = useFueler()
 
-    const [vehicles, setVehicles] = useState([])
+    const [drivers, setDrivers] = useState([])
 
     useEffect(() => {
         if (!serverConnected) return
-        getAllVehiclesByDriver(driver._id).then(data => {
-            console.log(data)
-            setVehicles(data)
-            setVehiclesFound(data.length != 0)
-            console.log('vehicles found!')
+        getAllDrivers().then(data => {
+            setDrivers(data)
+            console.log('drivers found!')
         }).catch(err => { console.error(err) })
     }, [])
 
-    const onClose = vehicle => {
-        setVehicle(vehicle)
+    const onClose = driver => {
+        setDriver(driver)
         setVisible(false)
     }
 
@@ -35,15 +33,14 @@ const VehicleModal = ({ visible, setVisible, driver, setVehicle, setVehiclesFoun
             visible={visible}
         >
             <Screen style={styles.container}>
-                <Text>VehicleModal</Text>
                 <FlatList
-                    data={vehicles}
-                    keyExtractor={vehicle => vehicle._id}
+                    data={drivers}
+                    keyExtractor={driver => driver._id}
                     renderItem={({ item }) => (
                         <Option
                             onPress={() => { onClose(item) }}
                             noArrow
-                        >{item.brand} {item.model}</Option>
+                        >{item.name} {item.surname}</Option>
                     )}
                 />
                 <Button
@@ -65,4 +62,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default VehicleModal
+export default DriverModal

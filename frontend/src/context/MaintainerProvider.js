@@ -1,8 +1,6 @@
 import React, {
     createContext,
-    useContext,
-    useState,
-    useEffect
+    useContext
 } from 'react'
 
 import { getAll as getAllVehiclesAPI } from 'api/vehicle'

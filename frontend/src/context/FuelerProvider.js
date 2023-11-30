@@ -4,7 +4,10 @@ import React, {
 } from 'react'
 
 import {
-    getAll as getAllVehiclesAPI
+    getAllDrivers as getAllDriversAPI
+} from 'api/user'
+import {
+    getAllByDriver as getAllVehiclesByDriverAPI
 } from 'api/vehicle'
 import {
     create as createFuelingAPI
@@ -17,18 +20,25 @@ const { Provider } = FuelerContext
 const FuelerProvider = ({ children }) => {
     const { webToken } = useAuth()
 
-    const getAllVehicles = async () => {
-        console.log('getting all vehicles...')
-        return getAllVehiclesAPI()
+    const getAllDrivers = async () => {
+        console.log('getting all drivers...')
+        return getAllDriversAPI()
     }
     const createFueling = async fueling => {
         console.log('creating a fueling...')
         return createFuelingAPI(webToken, fueling)
     }
+    const getAllVehiclesByDriver = async driverId => {
+        console.log('getting all vehicles by driver...')
+        return getAllVehiclesByDriverAPI(driverId)
+    }
 
     return (
         <Provider
-            value={{ getAllVehicles, createFueling }}
+            value={{
+                createFueling,
+                getAllDrivers, getAllVehiclesByDriver
+            }}
         >{children}</Provider>
     )
 }

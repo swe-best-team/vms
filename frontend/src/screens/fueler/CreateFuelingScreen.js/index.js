@@ -7,6 +7,7 @@ import TextInput from 'components/TextInput'
 import { Button } from 'react-native-paper'
 import { useFueler } from 'context/FuelerProvider'
 import { useAlert } from 'context'
+import DriverModal from './DriverModal'
 // import CostModal from './CostModal'
 // import VolumeModal from './VolumeModal'
 // import StationModal from './StationModal'
@@ -15,6 +16,7 @@ const CreateFuelingScreen = () => {
     const { createFueling } = useFueler()
     const { activateLoading, stopLoadingAndShowAlert } = useAlert()
 
+    const [driver, setDriver] = useState(null)
     const [vehicle, setVehicle] = useState(null)
     const [cost, setCost] = useState('')
     const [volume, setVolume] = useState('')
@@ -22,6 +24,7 @@ const CreateFuelingScreen = () => {
 
     const [vehicleModalVisible, setVehicleModalVisible] = useState(false)
 
+    const [driversVisible, setDriversVisible] = useState(false)
     const [vehiclesFound, setVehiclesFound] = useState(false)
     const btnDisabled = !(vehicle != null && cost && volume && station)
 
@@ -47,19 +50,36 @@ const CreateFuelingScreen = () => {
 
     return (
         <Screen>
-            <VehicleModal
-                visible={vehicleModalVisible}
-                setVisible={setVehicleModalVisible}
-                setVehicle={setVehicle}
-                setVehiclesFound={setVehiclesFound}
+            <DriverModal
+                visible={driversVisible}
+                setVisible={setDriversVisible}
+                setDriver={setDriver}
             />
-            <Option style={styles.option} onPress={() => { setVehicleModalVisible(true) }}>
-                {vehiclesFound
-                    ? vehicle == null
-                        ? 'Choose a vehicle'
-                        : `${vehicle.brand} ${vehicle.model}`
-                    : 'No vehicles found'}
+            <Option
+                onPress={() => { setDriversVisible(true) }}
+            >
+                {driver == null
+                    ? 'Choose a driver'
+                    : `${driver.name} ${driver.surname}`}
             </Option>
+            {driver &&
+                <>
+                    <VehicleModal
+                        visible={vehicleModalVisible}
+                        setVisible={setVehicleModalVisible}
+                        driver={driver}
+                        setVehicle={setVehicle}
+                        setVehiclesFound={setVehiclesFound}
+                    />
+                    <Option style={styles.option} onPress={() => { setVehicleModalVisible(true) }}>
+                        {vehiclesFound
+                            ? vehicle == null
+                                ? 'Choose a vehicle'
+                                : `${vehicle.brand} ${vehicle.model}`
+                            : 'No vehicles found'}
+                    </Option>
+                </>
+            }
             <TextInput
                 label='Cost'
                 state={cost}
