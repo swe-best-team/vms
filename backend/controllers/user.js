@@ -143,40 +143,60 @@ exports.generateReport = async (req, res) => {
         return resError(res, 'No tasks assigned to the driver')
 
     let totalDistance = 0;
-    for (const task in tasks) {
-        const routes = await Route.find({ status: 'completed', active: false })
+    let routeDistances = {};
+    index = 1;
+    for (const task of tasks) {
+            console.log(task)
+        const routes = await Route.find()
         routes.forEach(route => {
             const { start, end } = route.locations;
-            totalDistance += calculateDistance(start.latitude, start.longitude, end.latitude, end.longitude);
+            const routeDistance = calculateDistance(start.latitude, start.longitude, end.latitude, end.longitude);
+            totalDistance += routeDistance
+
+            const routeName = `route${index++}`;
+            routeDistances[routeName] = routeDistance;
         });
     }
 
-    const vehicles = await Vehicle.find({ driver })
-    let spendings = []
-    let fuelcost = []
-    await vehicles.map(async vehicle => {
-        let totalSpent = 0;
-        const maintenanceData = await Maintenance.find({ vehicle: driver })
+    routeDistances['TotalDistance'] = totalDistance;
+    index = 1;
+    findex = 1;
+    const vehicles = await Vehicle.find({ driver });
+    let spendings = [];
+    let maintenanceSpendings = {};
+    let fuelcost = [];
+    let fuelingSpendings = {};
+    let totalSpent = 0;
+    let fuelspent = 0;
+    await Promise.all(vehicles.map(async vehicle => {
+        console.log(vehicles)
+        const maintenanceData = await Maintenance.find({ vehicle: vehicle })
+        console.log(maintenanceData)
         await maintenanceData.map(async m => {
             const services = await Service.find({ maintenance: m });
             services.map(service => {
+                const serviceRoute = `serviceRoute${index++}`;
+                console.log(service.cost)
+                maintenanceSpendings[serviceRoute] = service.cost;
                 totalSpent += service.cost;
             })
         })
-
+        
         spendings.push(totalSpent);
-        let fuelspent
-        const fuelingData = await Fueling.find({ vehicle: driver })
+        
+        const fuelingData = await Fueling.find({ vehicle: vehicle })
         await fuelingData.map(async f => {
+            const fuelingRoute = `fuelingRoute${findex++}`;
+            fuelingSpendings[fuelingRoute] = f.cost;
             fuelspent += f.cost;
         })
-
+        
         fuelcost.push(fuelspent);
-
-
-    })
-
-
+    }))
+    maintenanceSpendings['TotalMaintenance'] = totalSpent;
+    fuelingSpendings['TotalFueling'] = fuelspent;
+    console.log(maintenanceSpendings);
+    console.log(fuelingSpendings);
 
     const { ChartJSNodeCanvas } = require('chartjs-node-canvas');
     const PDFDocument = require('pdfkit');
@@ -184,17 +204,17 @@ exports.generateReport = async (req, res) => {
     
     const width = 800; // Width of the chart
     const height = 600; // Height of the chart
+
+    const routeLabels = Object.keys(routeDistances)
+    const routeDistancesArray = Object.values(routeDistances)
     
-    const totalDistances = [200, 220, 150]; // Replace with your actual distances
-    const driverLabels = totalDistances.map((_, index) => `Driver ${index + 1}`);
-    
-    const chartOptions = {
+    const distanceChartOptions = {
       type: 'bar',
       data: {
-        labels: driverLabels,
+        labels: routeLabels,
         datasets: [{
-          label: 'Total Distance Covered',
-          data: totalDistances,
+          label: 'Distance covered by each route',
+          data: routeDistancesArray,
           backgroundColor: 'rgba(0, 123, 255, 0.5)',
           borderColor: 'rgba(0, 123, 255, 1)',
           borderWidth: 1
@@ -214,11 +234,69 @@ exports.generateReport = async (req, res) => {
       }
     };
     
+    const maintenanceLabels = Object.keys(maintenanceSpendings)
+    const maintenanceArray = Object.values(maintenanceSpendings)
+    const maintenanceChartOptions = {
+        type: 'bar',
+        data: {
+          labels: maintenanceLabels,
+          datasets: [{
+            label: 'Maintenance cost at each vehicle',
+            data: maintenanceArray,
+            backgroundColor: 'rgba(0, 123, 255, 0.5)',
+            borderColor: 'rgba(0, 123, 255, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            legend: {
+              display: true
+            }
+          }
+        }
+      };
+
+      const fuelingLabels = Object.keys(fuelingSpendings)
+      const fuelingArray = Object.values(fuelingSpendings)
+      const fuelingChartOptions = {
+          type: 'bar',
+          data: {
+            labels: fuelingLabels,
+            datasets: [{
+              label: 'Fueling cost at each vehicle',
+              data: fuelingArray,
+              backgroundColor: 'rgba(0, 123, 255, 0.5)',
+              borderColor: 'rgba(0, 123, 255, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            },
+            plugins: {
+              legend: {
+                display: true
+              }
+            }
+          }
+        };
+
     const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
     
     (async () => {
       // Create chart as a buffer
-      const chartBuffer = await chartJSNodeCanvas.renderToBuffer(chartOptions);
+      const distanceBuffer = await chartJSNodeCanvas.renderToBuffer(distanceChartOptions);
+      const maintenanceBuffer = await chartJSNodeCanvas.renderToBuffer(maintenanceChartOptions);
+      const fuelingBuffer = await chartJSNodeCanvas.renderToBuffer(fuelingChartOptions);
     
       // Create a PDF document
       const doc = new PDFDocument({ size: [width, height] });
@@ -226,7 +304,11 @@ exports.generateReport = async (req, res) => {
       doc.pipe(stream);
     
       // Embed the chart image into the PDF
-      doc.image(chartBuffer, 0, 0, { width, height });
+      doc.image(distanceBuffer, 0, 0, { width, height });
+      doc.addPage();
+      doc.image(maintenanceBuffer, 0, 0, { width, height });
+      doc.addPage();
+      doc.image(fuelingBuffer, 0, 0, { width, height });
     
       // Finalize the PDF and end the stream
       doc.end();
@@ -234,15 +316,10 @@ exports.generateReport = async (req, res) => {
 
     try {
         // const pdfPath = await exports.generateReport();
-        return res.sendFile(path.join(__dirname,'..', 'driversDistanceChart.pdf'));
+        file = await res.sendFile(path.join(__dirname,'..', 'driversDistanceChart.pdf'));
+        return file;
     } catch (error) {
         console.error(error);
         return resError(res, 'Error generating pdf')
     }
-    
-
-    return res.json({
-        success: true,
-
-    })
 }

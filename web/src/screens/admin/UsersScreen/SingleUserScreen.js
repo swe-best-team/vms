@@ -20,8 +20,10 @@ const SingleUserScreen = () => {
                     val={user[key]}
                 />
             )}
+            <p></p>
+            <Button style = {{backgroundColor: 'red', color: 'white'}}>Delete the user</Button>
             <GoBackBtn />
-            <Button>Delete the user</Button>
+            
         </Screen>
     )
 }
