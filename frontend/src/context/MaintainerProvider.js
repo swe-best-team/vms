@@ -13,6 +13,10 @@ const MaintainerProvider = ({ children }) => {
         console.log('getting all vehicles...')
         return getAllVehiclesAPI()
     }
+    const getAllVehiclesByDriver = async driverId => {
+        console.log('getting all vehicles by driver...')
+        return getAllVehiclesByDriverAPI(driverId)
+    }
 
     return (
         <Provider

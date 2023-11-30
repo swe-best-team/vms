@@ -5,20 +5,6 @@ import { useAuth } from 'context'
 import { StyleSheet } from 'react-native'
 import { Text, Button } from 'react-native-paper'
 import Screen from 'components/Screen'
-import Card from 'components/Card'
-
-const actions = [
-    {
-        title: 'View personal info',
-        description: '',
-        location: 'PersonalScreen'
-    },
-    {
-        title: 'Select Vehicle',
-        description: '',
-        location: 'maintanence'
-    }
-]
 
 const MaintainerScreen = ({ navigation }) => {
     const { user, logout } = useAuth()
@@ -30,14 +16,15 @@ const MaintainerScreen = ({ navigation }) => {
                 variant='titleLarge'
                 style={styles.title}
             >Welcome, maintainer {name} {surname}!</Text>
-            {actions.map((action, i) =>
-                <Card
-                    key={i}
-                    title={action.title}
-                    description={action.description}
-                    onPress={() => { navigation.navigate(action.location) }}
-                />
-            )}
+            <Button
+                onPress={() => { navigation.navigate('CreateMaintenanceScreen') }}
+                style={styles.btn}
+            >Create a maitanance</Button>
+            <Button
+                onPress={() => navigation.navigate('PersonalScreen')}
+                style={styles.btn}
+            >View personal info</Button>
+
             <Button
                 onPress={logout}
                 style={styles.btn}
