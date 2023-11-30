@@ -7,6 +7,7 @@ import AuthNavigator from 'navigation/AuthNavigator'
 import AdminNavigator from 'navigation/AdminNavigator'
 import DriverNavigator from 'navigation/DriverNavigator'
 import FuelerNavigator from 'navigation/FuelerNavigator'
+import MaintainerNavigator from 'navigation/MaintainerNavigator'
 
 import { ROLES } from 'utils/constants'
 
@@ -28,6 +29,7 @@ const getAuthorizedNavigator = role => {
         case ROLES.admin: return AdminNavigator
         case ROLES.driver: return DriverNavigator
         case ROLES.fueler: return FuelerNavigator
+        case ROLES.maintainer: return MaintainerNavigator
         default: return AuthNavigator
 
     }
