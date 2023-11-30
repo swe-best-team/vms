@@ -63,6 +63,40 @@ exports.create = async (req, res) => {
     })
 }
 
+exports.updateRoute = async (req, res) => {
+    // const { routeId } = req.params;
+    const { routeId, status, active } = req.body;
+
+    try {
+        const updatedRoute = await Route.findByIdAndUpdate(
+            routeId,
+            { $set: { status, active } },
+            { new: true } // This option returns the updated document
+        );
+
+        if (!updatedRoute) {
+            return resError(res, 'Route not found');
+        }
+
+        const taskRoutes = await Route.find({task: updatedRoute.task});
+        const taskStatus = calculateTaskStatus(taskRoutes);
+
+        await Task.findByIdAndUpdate(
+            updatedRoute.task,
+            { $set: {completed: taskStatus}},
+            {new: true}
+        );
+
+
+        return res.json({ success: true, route: updatedRoute });
+    } catch (err) {
+        return resError(res, 'Failed to update route');
+    }
+};
+function calculateTaskStatus(routes){
+    return routes.every(route => route.status === 'completed' && route.active === false);
+}
+
 exports.remove = async (req, res) => {
     const { id } = req.body
     const { email } = req.user

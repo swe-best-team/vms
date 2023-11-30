@@ -4,7 +4,7 @@ const {
     get,
     create, remove,
     getAllByDriver, getCurrentByDriver,
-    removeAll
+    removeAll, updateRoute
 } = require('../controllers/task')
 const { checkVal, checkId } = require('../middlewares/validation')
 const { valCreate } = require('../middlewares/validation/task')
@@ -18,5 +18,5 @@ router.delete('/remove', checkId, isLoggedIn, isAdmin, remove)
 router.delete('/remove/all', isLoggedIn, isAdmin, removeAll)
 router.post('/get/all', isLoggedIn, isDriver, getAllByDriver)
 router.post('/get/current', isLoggedIn, isDriver, getCurrentByDriver)
-
+router.put('/updateroute', updateRoute)
 module.exports = router
