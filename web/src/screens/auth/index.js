@@ -45,7 +45,7 @@ const AuthScreen = () => {
                     name='email'
                     autoComplete='email'
                     autoFocus
-                    value='admin@email.com'
+                    // value='admin@email.com'
                 />
                 <TextField
                     margin='normal'
@@ -55,7 +55,7 @@ const AuthScreen = () => {
                     label='Password'
                     type='password'
                     autoComplete='current-password'
-                    value='alihan123'
+                    // value='alihan123'
                 />
                 <Button
                     type='submit'

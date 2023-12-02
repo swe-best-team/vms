@@ -48,7 +48,7 @@ const TasksScreen = ({ navigation }) => {
                 </Text>
                 <Text style={styles.text}>on <Text style={styles.span}>{item.vehicle}</Text>{'\n'}</Text>
                 <Text style={styles.text}>till <Text style={styles.span}>{prettyDeadline}{'\n'}</Text></Text>
-                <Text style={[styles.status, item.completed && completed]}>
+                <Text style={[styles.status, item.completed && styles.completed]}>
                   {item.completed
                     ? 'COMPLETED'
                     : 'INCOMPLETED'

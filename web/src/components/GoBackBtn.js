@@ -4,8 +4,8 @@ import Button from '@mui/material/Button'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { Link } from 'react-router-dom'
 
-const Logout = () =>
-    <Link to='/'>
+const GoBackBtn = ({ link }) =>
+    <Link to={link || '/'}>
         <Button
             fullWidth
             variant='outlined'
@@ -14,4 +14,4 @@ const Logout = () =>
         >Go back</Button>
     </Link>
 
-export default Logout
+export default GoBackBtn

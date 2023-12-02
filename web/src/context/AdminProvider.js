@@ -18,6 +18,7 @@ import {
     createByAdmin as createVehicleAPI
 } from 'api/vehicle'
 import { create as createTaskAPI } from 'api/task'
+import { getAllByMaintainer as getAllMaintenancesByMaintainerAPI } from 'api/maintenance'
 
 const AdminContext = createContext()
 const { Provider } = AdminContext
@@ -53,13 +54,18 @@ const AdminProvider = ({ children }) => {
         console.log('removing user...')
         return removeUserAPI(webToken, userId)
     }
+    const getAllMaintenancesByMaintainer = async maintainerId => {
+        console.log('getting all maintenances by maintainer...')
+        return getAllMaintenancesByMaintainerAPI(maintainerId)
+    }
 
     return (
         <Provider
             value={{
                 createUser, getAllDrivers,
                 getAllVehiclesByDriver, createTask,
-                createVehicle, getAllUsers, removeUser
+                createVehicle, getAllUsers, removeUser,
+                getAllMaintenancesByMaintainer
             }}
         >
             <Outlet />

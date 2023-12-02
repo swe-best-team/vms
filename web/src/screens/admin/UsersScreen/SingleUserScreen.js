@@ -8,6 +8,7 @@ import Field from 'components/Field'
 import { Button } from '@mui/material'
 import { useAdmin } from 'context/AdminProvider'
 import { useAlert } from 'context'
+import Vehicles from './Vehicles'
 
 const SingleUserScreen = () => {
     const navigate = useNavigate()
@@ -16,6 +17,8 @@ const SingleUserScreen = () => {
 
     const { removeUser } = useAdmin()
     const { activateLoading, stopLoadingAndShowAlert, stopLoading } = useAlert()
+
+    const additionalData = getAdditionalData(user)
 
     const remove = () => {
         activateLoading()
@@ -39,14 +42,22 @@ const SingleUserScreen = () => {
                     val={user[key]}
                 />
             )}
-            <p></p>
+            {additionalData}
             <Button
-                style={{ backgroundColor: 'red', color: 'white' }}
+                color='error'
+                sx={{ mt: 2 }}
                 onClick={remove}
             >Delete the user</Button>
-            <GoBackBtn />
+            <GoBackBtn link='/view/users' />
         </Screen>
     )
+}
+
+const getAdditionalData = user => {
+    switch (user.role) {
+        case 'driver': return <Vehicles driver={user._id} />
+        default: return <></>
+    }
 }
 
 export default SingleUserScreen
