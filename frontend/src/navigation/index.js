@@ -1,20 +1,38 @@
-import React, {
-    useEffect
-} from 'react'
-import { View, Text } from 'react-native'
+import React from 'react'
 
 import { useAuth } from 'context'
+import { NavigationContainer } from '@react-navigation/native'
+
+import AuthNavigator from 'navigation/AuthNavigator'
+import AdminNavigator from 'navigation/AdminNavigator'
+import DriverNavigator from 'navigation/DriverNavigator'
+import FuelerNavigator from 'navigation/FuelerNavigator'
+// import MaintainerNavigator from 'navigation/MaintainerNavigator'
+
+import { ROLES } from 'utils/constants'
 
 const RootNavigation = () => {
-    const { username } = useAuth()
+    const { loggedIn, user } = useAuth()
 
-    useEffect(() => console.log(username), [])
+    const Navigator = loggedIn ?
+        getAuthorizedNavigator(user.role) : AuthNavigator
 
     return (
-        <View>
-            <Text>Hello, {username}</Text>
-        </View>
+        <NavigationContainer>
+            <Navigator />
+        </NavigationContainer>
     )
+}
+
+const getAuthorizedNavigator = role => {
+    switch (role) {
+        case ROLES.admin: return AdminNavigator
+        case ROLES.driver: return DriverNavigator
+        case ROLES.fueler: return FuelerNavigator
+        // case ROLES.maintainer: return MaintainerNavigator
+        default: return AuthNavigator
+
+    }
 }
 
 export default RootNavigation

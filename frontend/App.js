@@ -1,15 +1,15 @@
-import React, { FunctionComponent } from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import React from 'react'
 
 import MainProvider from 'context'
 import RootNavigation from 'navigation'
 
+import { enableLatestRenderer } from 'react-native-maps'
+enableLatestRenderer()
+
 const App = () => (
-    <MainProvider>
-        <SafeAreaView>
-            <RootNavigation />
-        </SafeAreaView>
-    </MainProvider>
+  <MainProvider>
+    <RootNavigation />
+  </MainProvider>
 )
 
 export default App
